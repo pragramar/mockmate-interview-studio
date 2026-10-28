@@ -115,13 +115,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
-    scripts: [
-      {
-        // Applies the persisted theme before first paint to avoid a flash.
-        children:
-          "try{var t=localStorage.getItem('interview-coach-theme')||'system';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light';}catch(e){}",
-      },
-    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -136,6 +129,9 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <ScriptOnce>
+          {`try{var t=localStorage.getItem('interview-coach-theme')||'system';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light';}catch(e){}`}
+        </ScriptOnce>
         {children}
         <Scripts />
       </body>
@@ -151,7 +147,6 @@ function RootComponent() {
       <QueryClientProvider client={queryClient}>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
-        <ScriptOnce>{""}</ScriptOnce>
       </QueryClientProvider>
     </ThemeProvider>
   );
