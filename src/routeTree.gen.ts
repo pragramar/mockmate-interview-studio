@@ -16,6 +16,7 @@ import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppHistoryRouteImport } from './routes/_app.history'
 import { Route as AppProgressRouteImport } from './routes/_app.progress'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as InterviewNewRouteImport } from './routes/interview.new'
 import { Route as AppSettingsPrivacyRouteImport } from './routes/_app.settings.privacy'
 import { Route as AppCoachSessionIdRouteImport } from './routes/_app.coach.session.$id'
 
@@ -53,6 +54,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
+const InterviewNewRoute = InterviewNewRouteImport.update({
+  id: '/interview/new',
+  path: '/interview/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppSettingsPrivacyRoute = AppSettingsPrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof AppHistoryRoute
   '/progress': typeof AppProgressRoute
   '/settings': typeof AppSettingsRouteWithChildren
+  '/interview/new': typeof InterviewNewRoute
   '/settings/privacy': typeof AppSettingsPrivacyRoute
   '/coach/session/$id': typeof AppCoachSessionIdRoute
 }
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/history': typeof AppHistoryRoute
   '/progress': typeof AppProgressRoute
   '/settings': typeof AppSettingsRouteWithChildren
+  '/interview/new': typeof InterviewNewRoute
   '/settings/privacy': typeof AppSettingsPrivacyRoute
   '/coach/session/$id': typeof AppCoachSessionIdRoute
 }
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/_app/history': typeof AppHistoryRoute
   '/_app/progress': typeof AppProgressRoute
   '/_app/settings': typeof AppSettingsRouteWithChildren
+  '/interview/new': typeof InterviewNewRoute
   '/_app/settings/privacy': typeof AppSettingsPrivacyRoute
   '/_app/coach/session/$id': typeof AppCoachSessionIdRoute
 }
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/progress'
     | '/settings'
+    | '/interview/new'
     | '/settings/privacy'
     | '/coach/session/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/progress'
     | '/settings'
+    | '/interview/new'
     | '/settings/privacy'
     | '/coach/session/$id'
   id:
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '/_app/history'
     | '/_app/progress'
     | '/_app/settings'
+    | '/interview/new'
     | '/_app/settings/privacy'
     | '/_app/coach/session/$id'
   fileRoutesById: FileRoutesById
@@ -133,6 +145,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  InterviewNewRoute: typeof InterviewNewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -185,6 +198,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/settings'
       preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/interview/new': {
+      id: '/interview/new'
+      path: '/interview/new'
+      fullPath: '/interview/new'
+      preLoaderRoute: typeof InterviewNewRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_app/settings/privacy': {
       id: '/_app/settings/privacy'
@@ -248,6 +268,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  InterviewNewRoute: InterviewNewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
