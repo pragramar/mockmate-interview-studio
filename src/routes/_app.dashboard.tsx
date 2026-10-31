@@ -200,7 +200,9 @@ function DashboardPage() {
                     <StatusBadge interview={interview} />
                     {interview.reportAvailable ? (
                       <Button variant="ghost" size="sm" asChild>
-                        <Link to={`/interview/report/${interview.id}`}>View report</Link>
+                        <Link to="/interview/report/$id" params={{ id: interview.id }}>
+                          View report
+                        </Link>
                       </Button>
                     ) : (
                       <Button variant="ghost" size="sm" asChild>
