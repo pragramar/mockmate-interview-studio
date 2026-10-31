@@ -13,6 +13,7 @@ import {
 
 import { DemoLabel } from "@/components/demo-label";
 import { SpeechTimeline } from "@/components/charts/speech-timeline";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +25,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getReport } from "@/lib/repo";
-import { formatTimestamp, modeLabel, roleLabel } from "@/lib/format";
+import { modeLabel, roleLabel } from "@/lib/format";
 import type { Confidence, MetricRecord } from "@/types";
 
 export const Route = createFileRoute("/interview/report/$id")({
@@ -546,8 +547,7 @@ function ReportPage() {
           </div>
           <p className="mt-6 text-xs text-muted-foreground">
             Demo build: this report is a fully scripted sample fixture adapted to your session's
-            configuration — it does not analyse real audio. Format timestamp{" "}
-            {formatTimestamp(1140)} shown as 19:00 in excerpts above.
+            configuration — it does not analyse real audio.
           </p>
         </section>
       </main>
