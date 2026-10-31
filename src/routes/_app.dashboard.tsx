@@ -163,7 +163,10 @@ function DashboardPage() {
               </div>
               <Separator />
               <Button variant="outline" className="w-full" asChild>
-                <Link to={`/interview/report/${latestWithReport?.id ?? "demo-1"}`}>
+                <Link
+                  to="/interview/report/$id"
+                  params={{ id: latestWithReport?.id ?? "demo-1" }}
+                >
                   Open full report <ArrowRight className="size-4" />
                 </Link>
               </Button>

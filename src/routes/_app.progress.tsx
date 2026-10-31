@@ -29,8 +29,8 @@ export const Route = createFileRoute("/_app/progress")({
 });
 
 function ProgressPage() {
-  const first = PROGRESS_SERIES[0];
-  const last = PROGRESS_SERIES[PROGRESS_SERIES.length - 1];
+  const first = PROGRESS_SERIES[0]!;
+  const last = PROGRESS_SERIES[PROGRESS_SERIES.length - 1]!;
   const technicalDelta = last.technicalScore - first.technicalScore;
   const communicationDelta = last.communicationScore - first.communicationScore;
 

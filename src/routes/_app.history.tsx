@@ -159,7 +159,9 @@ function HistoryPage() {
                         <td className="px-4 py-3">
                           {interview.reportAvailable ? (
                             <Button variant="ghost" size="sm" asChild>
-                              <Link to={`/interview/report/${interview.id}`}>View</Link>
+                              <Link to="/interview/report/$id" params={{ id: interview.id }}>
+                                View
+                              </Link>
                             </Button>
                           ) : (
                             <span className="text-xs text-muted-foreground">
