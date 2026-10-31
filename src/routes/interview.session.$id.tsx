@@ -10,7 +10,7 @@ import {
   Signal,
   Timer,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { DemoLabel } from "@/components/demo-label";
 import {
@@ -27,7 +27,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { getSession, markReportAvailable } from "@/lib/repo";
+import { getInterviewScript, getSession, markReportAvailable } from "@/lib/repo";
 import { formatClock, modeLabel, roleLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -48,13 +48,7 @@ export const Route = createFileRoute("/interview/session/$id")({
 });
 
 type Phase =
-  | "connecting"
-  | "ready"
-  | "interviewer"
-  | "listening"
-  | "processing"
-  | "completing"
-  | "completed";
+  "connecting" | "ready" | "interviewer" | "listening" | "processing" | "completing" | "completed";
 
 const PHASE_LABELS: Record<Phase, string> = {
   connecting: "Connecting…",
@@ -73,21 +67,18 @@ function SessionPage() {
   const navigate = useNavigate();
   const session = getSession(id);
 
-  const script = useMemo(() => session ? [] : [], [session]);
-
   const [phase, setPhase] = useState<Phase>("connecting");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [typedLength, setTypedLength] = useState(0);
   const [muted, setMuted] = useState(false);
   const [captionsOn, setCaptionsOn] = useState(true);
   const [elapsed, setElapsed] = useState(0);
-  const [micLevel, setMicLevel] = useState(0);
   const transcriptRef = useRef<HTMLDivElement>(null);
 
-  // Load the scripted demo question bank lazily (module scope stays SSR-safe).
-  const [questions, setQuestions] = useState<ReturnType<typeof loadScript> | null>(null);
+  // Load the scripted demo question bank after mount (keeps module scope SSR-safe).
+  const [questions, setQuestions] = useState<ReturnType<typeof getInterviewScript> | null>(null);
   useEffect(() => {
-    if (session) setQuestions(loadScript());
+    if (session) setQuestions(getInterviewScript());
   }, [session]);
 
   // Connecting → ready
@@ -110,7 +101,8 @@ function SessionPage() {
   // Interviewer types out the current line
   useEffect(() => {
     if (phase !== "interviewer" || !questions) return;
-    const line = questions[questionIndex].interviewerLine;
+    const line = questions[questionIndex]?.interviewerLine;
+    if (!line) return;
     if (typedLength >= line.length) {
       const timer = setTimeout(() => {
         setPhase("listening");
@@ -120,26 +112,6 @@ function SessionPage() {
     const timer = setTimeout(() => setTypedLength((n) => n + 1), TYPING_SPEED_MS);
     return () => clearTimeout(timer);
   }, [phase, typedLength, questionIndex, questions]);
-
-  // Listening: simulated mic level animation
-  useEffect(() => {
-    if (phase !== "listening" || muted) {
-      setMicLevel(0);
-      return;
-    }
-    let frame: number;
-    const tick = () => {
-      setMicLevel(25 + Math.round(Math.random() * 45));
-      frame = requestAnimationFrame(tick);
-    };
-    // ~8 fps random walk is enough for a restrained indicator
-    const interval = setInterval(() => tick(), 120);
-    return () => {
-      clearInterval(interval);
-      cancelAnimationFrame(frame);
-      setMicLevel(0);
-    };
-  }, [phase, muted]);
 
   // Elapsed timer
   useEffect(() => {
@@ -199,9 +171,7 @@ function SessionPage() {
 
   const { config, summary } = session;
   const current = questions?.[questionIndex];
-  const typedLine = current
-    ? current.interviewerLine.slice(0, typedLength)
-    : "";
+  const typedLine = current ? current.interviewerLine.slice(0, typedLength) : "";
   const totalQuestions = questions?.length ?? 5;
 
   const endNow = () => {
@@ -231,7 +201,10 @@ function SessionPage() {
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="gap-1.5 border-border bg-secondary text-secondary-foreground">
+            <Badge
+              variant="outline"
+              className="gap-1.5 border-border bg-secondary text-secondary-foreground"
+            >
               <DemoLabel />
             </Badge>
             <AlertDialog>
@@ -244,8 +217,8 @@ function SessionPage() {
                 <AlertDialogHeader>
                   <AlertDialogTitle>End this interview now?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    The interview stops here and your report is generated from the answers so far
-                    — fewer answers mean thinner evidence. This action can't be undone.
+                    The interview stops here and your report is generated from the answers so far —
+                    fewer answers mean thinner evidence. This action can't be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -273,7 +246,9 @@ function SessionPage() {
               <span
                 className={cn(
                   "flex size-9 items-center justify-center rounded-full",
-                  listening ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground",
+                  listening
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-secondary-foreground",
                 )}
               >
                 {listening ? <Mic className="size-4" /> : <AudioLines className="size-4" />}
@@ -311,10 +286,11 @@ function SessionPage() {
           <div className="flex flex-1 flex-col px-4 py-6 sm:px-6">
             {phase === "connecting" && (
               <div className="m-auto text-center">
-                <Signal className="mx-auto size-6 animate-pulse text-muted-foreground" aria-hidden />
-                <p className="mt-3 text-sm text-muted-foreground">
-                  Establishing the demo session…
-                </p>
+                <Signal
+                  className="mx-auto size-6 animate-pulse text-muted-foreground"
+                  aria-hidden
+                />
+                <p className="mt-3 text-sm text-muted-foreground">Establishing the demo session…</p>
               </div>
             )}
             {phase === "ready" && (
@@ -324,35 +300,41 @@ function SessionPage() {
                 </p>
               </div>
             )}
-            {(phase === "interviewer" || phase === "listening" || phase === "processing") && current && (
-              <>
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  Question {questionIndex + 1} of {totalQuestions} · {current.topic}
-                </p>
-                <p className="mt-3 text-lg leading-relaxed sm:text-xl">{typedLine}</p>
-                {listening && (
-                  <div className="mt-auto pt-6">
-                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-secondary/60 px-4 py-3">
-                      <p className="text-xs text-muted-foreground">
-                        In a real session you would answer aloud. This demo advances on your
-                        command.
-                      </p>
-                      <Button onClick={() => setPhase("processing")} disabled={phase !== "listening"}>
-                        I'm done answering
-                      </Button>
-                    </div>
-                  </div>
-                )}
-                {phase === "processing" && (
-                  <p className="mt-6 text-sm text-muted-foreground">
-                    Recording your response in the transcript… (simulated)
+            {(phase === "interviewer" || phase === "listening" || phase === "processing") &&
+              current && (
+                <>
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    Question {questionIndex + 1} of {totalQuestions} · {current.topic}
                   </p>
-                )}
-              </>
-            )}
+                  <p className="mt-3 text-lg leading-relaxed sm:text-xl">{typedLine}</p>
+                  {listening && (
+                    <div className="mt-auto pt-6">
+                      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-secondary/60 px-4 py-3">
+                        <p className="text-xs text-muted-foreground">
+                          In a real session you would answer aloud. This demo advances on your
+                          command.
+                        </p>
+                        <Button
+                          onClick={() => setPhase("processing")}
+                          disabled={phase !== "listening"}
+                        >
+                          I'm done answering
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                  {phase === "processing" && (
+                    <p className="mt-6 text-sm text-muted-foreground">
+                      Recording your response in the transcript… (simulated)
+                    </p>
+                  )}
+                </>
+              )}
             {phase === "completing" && (
               <div className="m-auto text-center">
-                <p className="text-sm text-muted-foreground">Wrapping up and generating the report…</p>
+                <p className="text-sm text-muted-foreground">
+                  Wrapping up and generating the report…
+                </p>
               </div>
             )}
           </div>
@@ -424,7 +406,11 @@ function SessionPage() {
 
           <Card>
             <CardContent className="space-y-2 pt-6">
-              <Button variant="outline" className="w-full justify-start" onClick={() => setMuted((m) => !m)}>
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => setMuted((m) => !m)}
+              >
                 {muted ? <Mic className="size-4" /> : <MicOff className="size-4" />}
                 {muted ? "Unmute (demo)" : "Mute microphone"}
               </Button>
@@ -452,11 +438,3 @@ function SessionPage() {
     </div>
   );
 }
-
-/** Loads the scripted interview bank (client-only; keeps fixtures out of SSR work). */
-function loadScript() {
-  // Imported lazily to keep the module graph simple; the data is static.
-  return getInterviewScript();
-}
-
-import { getInterviewScript } from "@/lib/repo";

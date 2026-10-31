@@ -14,13 +14,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { DemoLabel } from "@/components/demo-label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
@@ -113,16 +107,24 @@ function CoachSessionPage() {
         <Card>
           <CardHeader>
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="outline" className="border-border bg-secondary text-secondary-foreground">
+              <Badge
+                variant="outline"
+                className="border-border bg-secondary text-secondary-foreground"
+              >
                 {exercise.skill}
               </Badge>
-              <Badge variant="outline" className="border-border bg-secondary text-secondary-foreground">
+              <Badge
+                variant="outline"
+                className="border-border bg-secondary text-secondary-foreground"
+              >
                 {difficultyLabel(exercise.difficulty)}
               </Badge>
               <DemoLabel />
             </div>
             <CardTitle className="text-lg">{exercise.title}</CardTitle>
-            <CardDescription className="text-sm leading-relaxed">{exercise.question}</CardDescription>
+            <CardDescription className="text-sm leading-relaxed">
+              {exercise.question}
+            </CardDescription>
           </CardHeader>
         </Card>
 
@@ -216,7 +218,8 @@ function CoachSessionPage() {
                     <BookOpenCheck className="size-4 text-primary" aria-hidden /> Model answer
                   </CardTitle>
                   <CardDescription>
-                    One strong way to answer this — compare it with your attempts, don't memorise it.
+                    One strong way to answer this — compare it with your attempts, don't memorise
+                    it.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -234,8 +237,8 @@ function CoachSessionPage() {
                   <Eye className="mx-auto size-5 text-muted-foreground" aria-hidden />
                   <p className="mt-2 text-sm font-medium">Model answer locked</p>
                   <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
-                    You'll see a model answer after you submit your first attempt — struggling
-                    first is what makes it stick.
+                    You'll see a model answer after you submit your first attempt — struggling first
+                    is what makes it stick.
                   </p>
                 </CardContent>
               </Card>
@@ -250,8 +253,9 @@ function CoachSessionPage() {
                   <Lightbulb className="size-4 text-primary" aria-hidden /> Hints
                 </CardTitle>
                 <CardDescription>
-                  Request hints one level at a time. Level {Math.min(hintLevel + 1, exercise.hints.length)} of{" "}
-                  {exercise.hints.length} available.
+                  Request hints one level at a time. Level{" "}
+                  {Math.min(hintLevel + 1, exercise.hints.length)} of {exercise.hints.length}{" "}
+                  available.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -291,7 +295,11 @@ function CoachSessionPage() {
                 {showExplanation ? (
                   <p className="text-sm leading-relaxed">{exercise.explanation}</p>
                 ) : (
-                  <Button variant="outline" className="w-full" onClick={() => setShowExplanation(true)}>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setShowExplanation(true)}
+                  >
                     Request explanation
                   </Button>
                 )}
@@ -314,8 +322,8 @@ function CoachSessionPage() {
                   </span>
                 </p>
                 <p className="mt-1 text-xs">
-                  Change this in Settings — it controls when hints and explanations become
-                  available during guided sessions.
+                  Change this in Settings — it controls when hints and explanations become available
+                  during guided sessions.
                 </p>
               </CardContent>
             </Card>
@@ -334,8 +342,7 @@ function CoachSessionPage() {
         </div>
 
         <p className="text-xs text-muted-foreground">
-          This session is a demonstration: the coach's feedback is scripted sample content, and
-          {" "}
+          This session is a demonstration: the coach's feedback is scripted sample content, and{" "}
           <button
             type="button"
             className="text-primary underline-offset-2 hover:underline"

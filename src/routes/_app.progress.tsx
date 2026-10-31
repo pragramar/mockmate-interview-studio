@@ -4,13 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { DemoLabel } from "@/components/demo-label";
 import { ProgressChart } from "@/components/charts/progress-chart";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PROGRESS_SERIES, PRACTISED_SKILLS, SAMPLE_REPORT } from "@/data/fixtures";
 import { formatRelative } from "@/lib/format";
 
@@ -35,8 +29,8 @@ export const Route = createFileRoute("/_app/progress")({
 });
 
 function ProgressPage() {
-  const first = PROGRESS_SERIES[0];
-  const last = PROGRESS_SERIES[PROGRESS_SERIES.length - 1];
+  const first = PROGRESS_SERIES[0]!;
+  const last = PROGRESS_SERIES[PROGRESS_SERIES.length - 1]!;
   const technicalDelta = last.technicalScore - first.technicalScore;
   const communicationDelta = last.communicationScore - first.communicationScore;
 
@@ -102,7 +96,10 @@ function ProgressPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               {SAMPLE_REPORT.improvements.map((improvement) => (
-                <div key={improvement.title} className="rounded-lg border border-border bg-background p-3">
+                <div
+                  key={improvement.title}
+                  className="rounded-lg border border-border bg-background p-3"
+                >
                   <p className="text-sm font-medium">{improvement.title}</p>
                   <p className="mt-1 text-xs text-muted-foreground">{improvement.practiceAction}</p>
                 </div>

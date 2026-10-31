@@ -14,13 +14,7 @@ import { useState, type ReactNode } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DEMO_USER } from "@/data/fixtures";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -131,7 +125,12 @@ export function AppShell({
               {/* Mobile drawer trigger */}
               <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="Open navigation" className="md:hidden">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Open navigation"
+                    className="md:hidden"
+                  >
                     <Menu className="size-4" />
                   </Button>
                 </SheetTrigger>

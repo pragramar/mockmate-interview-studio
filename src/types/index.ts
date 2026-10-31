@@ -2,15 +2,7 @@
 
 export type InterviewMode = "mock" | "guided";
 
-export type TargetRole =
-  | "sde"
-  | "backend"
-  | "frontend"
-  | "data"
-  | "ml"
-  | "qa"
-  | "devops"
-  | "other";
+export type TargetRole = "sde" | "backend" | "frontend" | "data" | "ml" | "qa" | "devops" | "other";
 
 export type Seniority = "fresher" | "early" | "mid";
 

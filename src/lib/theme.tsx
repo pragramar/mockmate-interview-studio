@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 export type Theme = "light" | "dark" | "system";
 
@@ -26,9 +19,7 @@ export function applyThemeToDocument(theme: Theme) {
 function readStoredTheme(): Theme {
   if (typeof window === "undefined") return "system";
   const stored = window.localStorage.getItem(STORAGE_KEY);
-  return stored === "light" || stored === "dark" || stored === "system"
-    ? stored
-    : "system";
+  return stored === "light" || stored === "dark" || stored === "system" ? stored : "system";
 }
 
 type ThemeContextValue = {

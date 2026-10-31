@@ -38,8 +38,8 @@ export function SiteFooter() {
           <div className="max-w-xs">
             <Wordmark />
             <p className="mt-3 text-sm text-muted-foreground">
-              Realistic technical interviews and guided practice, with feedback grounded in what
-              you actually said.
+              Realistic technical interviews and guided practice, with feedback grounded in what you
+              actually said.
             </p>
             <p className="mt-3 text-xs text-muted-foreground">
               Demonstration build — all data shown is sample data.

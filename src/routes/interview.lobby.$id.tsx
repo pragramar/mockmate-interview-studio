@@ -19,13 +19,7 @@ import { DemoLabel } from "@/components/demo-label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getSession } from "@/lib/repo";
 import { difficultyLabel, modeLabel, roleLabel } from "@/lib/format";
@@ -86,8 +80,8 @@ function LobbyPage() {
               <CircleAlert className="size-5 text-warning" aria-hidden /> Interview not found
             </CardTitle>
             <CardDescription>
-              This lobby's session ID doesn't exist in this demo. Sessions are created locally
-              when you finish the setup wizard.
+              This lobby's session ID doesn't exist in this demo. Sessions are created locally when
+              you finish the setup wizard.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -191,7 +185,9 @@ function LobbyPage() {
     },
     {
       label:
-        micState === "simulated" ? "Simulated microphone selected (demo)" : "Microphone check passed",
+        micState === "simulated"
+          ? "Simulated microphone selected (demo)"
+          : "Microphone check passed",
       ok: micOk,
       detail:
         micState === "untested"
@@ -347,7 +343,10 @@ function LobbyPage() {
                   ) : (
                     <ul className="mt-1.5 space-y-1">
                       {devices.map((device, index) => (
-                        <li key={index} className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <li
+                          key={index}
+                          className="flex items-center gap-2 text-xs text-muted-foreground"
+                        >
                           <span
                             aria-hidden
                             className={`size-1.5 rounded-full ${device.kind === "audioinput" ? "bg-primary" : "bg-muted-foreground/40"}`}
@@ -410,7 +409,10 @@ function LobbyPage() {
               </CardHeader>
               <CardContent className="space-y-4 text-sm">
                 <div>
-                  <Badge variant="outline" className="border-border bg-secondary text-secondary-foreground">
+                  <Badge
+                    variant="outline"
+                    className="border-border bg-secondary text-secondary-foreground"
+                  >
                     {modeLabel(summary.mode)}
                   </Badge>
                   <p className="mt-2 text-xs text-muted-foreground">
@@ -472,7 +474,7 @@ function LobbyPage() {
                       : "Give consent in the setup wizard to enable this."}
                   </p>
                 )}
-              </Card>
+              </CardContent>
             </Card>
           </div>
         </div>
