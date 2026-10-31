@@ -422,7 +422,7 @@ function InterviewSetupPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => {
-                        update({ resumeFileName: undefined });
+                        setConfig((c) => { const next = { ...c }; delete next.resumeFileName; return next; });
                         setResumeError(null);
                       }}
                     >

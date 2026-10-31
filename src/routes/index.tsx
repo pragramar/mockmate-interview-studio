@@ -126,7 +126,7 @@ function HeroPreview() {
         </div>
         <div className="mt-3 flex gap-2">
           <Button size="sm" variant="secondary" asChild>
-            <Link to="/interview/report/demo-1">
+            <Link to="/interview/report/$id" params={{ id: "demo-1" }}>
               View a sample report <ArrowRight className="size-3.5" />
             </Link>
           </Button>
@@ -261,7 +261,7 @@ function ReportPreview() {
               </p>
             </div>
             <Button variant="outline" className="mt-6" asChild>
-              <Link to="/interview/report/demo-1">
+              <Link to="/interview/report/$id" params={{ id: "demo-1" }}>
                 Open the full sample report <ArrowRight className="size-4" />
               </Link>
             </Button>

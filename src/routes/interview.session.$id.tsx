@@ -73,7 +73,6 @@ function SessionPage() {
   const [muted, setMuted] = useState(false);
   const [captionsOn, setCaptionsOn] = useState(true);
   const [elapsed, setElapsed] = useState(0);
-  const [micLevel, setMicLevel] = useState(0);
   const transcriptRef = useRef<HTMLDivElement>(null);
 
   // Load the scripted demo question bank after mount (keeps module scope SSR-safe).
@@ -116,7 +115,6 @@ function SessionPage() {
   // Listening: simulated mic level animation
   useEffect(() => {
     if (phase !== "listening" || muted) {
-      setMicLevel(0);
       return;
     }
     let frame: number;
@@ -129,7 +127,6 @@ function SessionPage() {
     return () => {
       clearInterval(interval);
       cancelAnimationFrame(frame);
-      setMicLevel(0);
     };
   }, [phase, muted]);
 
