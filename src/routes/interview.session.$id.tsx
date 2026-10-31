@@ -73,8 +73,6 @@ function SessionPage() {
   const navigate = useNavigate();
   const session = getSession(id);
 
-  const script = useMemo(() => session ? [] : [], [session]);
-
   const [phase, setPhase] = useState<Phase>("connecting");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [typedLength, setTypedLength] = useState(0);
@@ -84,10 +82,10 @@ function SessionPage() {
   const [micLevel, setMicLevel] = useState(0);
   const transcriptRef = useRef<HTMLDivElement>(null);
 
-  // Load the scripted demo question bank lazily (module scope stays SSR-safe).
-  const [questions, setQuestions] = useState<ReturnType<typeof loadScript> | null>(null);
+  // Load the scripted demo question bank after mount (keeps module scope SSR-safe).
+  const [questions, setQuestions] = useState<ReturnType<typeof getInterviewScript> | null>(null);
   useEffect(() => {
-    if (session) setQuestions(loadScript());
+    if (session) setQuestions(getInterviewScript());
   }, [session]);
 
   // Connecting → ready
