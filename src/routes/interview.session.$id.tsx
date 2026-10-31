@@ -101,7 +101,8 @@ function SessionPage() {
   // Interviewer types out the current line
   useEffect(() => {
     if (phase !== "interviewer" || !questions) return;
-    const line = questions[questionIndex].interviewerLine;
+    const line = questions[questionIndex]?.interviewerLine;
+    if (!line) return;
     if (typedLength >= line.length) {
       const timer = setTimeout(() => {
         setPhase("listening");
@@ -111,24 +112,6 @@ function SessionPage() {
     const timer = setTimeout(() => setTypedLength((n) => n + 1), TYPING_SPEED_MS);
     return () => clearTimeout(timer);
   }, [phase, typedLength, questionIndex, questions]);
-
-  // Listening: simulated mic level animation
-  useEffect(() => {
-    if (phase !== "listening" || muted) {
-      return;
-    }
-    let frame: number;
-    const tick = () => {
-      setMicLevel(25 + Math.round(Math.random() * 45));
-      frame = requestAnimationFrame(tick);
-    };
-    // ~8 fps random walk is enough for a restrained indicator
-    const interval = setInterval(() => tick(), 120);
-    return () => {
-      clearInterval(interval);
-      cancelAnimationFrame(frame);
-    };
-  }, [phase, muted]);
 
   // Elapsed timer
   useEffect(() => {
