@@ -10,7 +10,7 @@ import {
   Signal,
   Timer,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { DemoLabel } from "@/components/demo-label";
 import {
@@ -27,7 +27,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { getSession, markReportAvailable } from "@/lib/repo";
+import { getInterviewScript, getSession, markReportAvailable } from "@/lib/repo";
 import { formatClock, modeLabel, roleLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -453,10 +453,3 @@ function SessionPage() {
   );
 }
 
-/** Loads the scripted interview bank (client-only; keeps fixtures out of SSR work). */
-function loadScript() {
-  // Imported lazily to keep the module graph simple; the data is static.
-  return getInterviewScript();
-}
-
-import { getInterviewScript } from "@/lib/repo";
