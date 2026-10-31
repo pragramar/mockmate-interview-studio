@@ -472,7 +472,7 @@ function LobbyPage() {
                       : "Give consent in the setup wizard to enable this."}
                   </p>
                 )}
-              </Card>
+              </CardContent>
             </Card>
           </div>
         </div>
