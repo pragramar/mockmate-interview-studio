@@ -18,6 +18,9 @@ import { Route as AppProgressRouteImport } from './routes/_app.progress'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as InterviewNewRouteImport } from './routes/interview.new'
 import { Route as AppSettingsPrivacyRouteImport } from './routes/_app.settings.privacy'
+import { Route as InterviewLobbyIdRouteImport } from './routes/interview.lobby.$id'
+import { Route as InterviewReportIdRouteImport } from './routes/interview.report.$id'
+import { Route as InterviewSessionIdRouteImport } from './routes/interview.session.$id'
 import { Route as AppCoachSessionIdRouteImport } from './routes/_app.coach.session.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -64,6 +67,21 @@ const AppSettingsPrivacyRoute = AppSettingsPrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => AppSettingsRoute,
 } as any)
+const InterviewLobbyIdRoute = InterviewLobbyIdRouteImport.update({
+  id: '/interview/lobby/$id',
+  path: '/interview/lobby/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InterviewReportIdRoute = InterviewReportIdRouteImport.update({
+  id: '/interview/report/$id',
+  path: '/interview/report/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InterviewSessionIdRoute = InterviewSessionIdRouteImport.update({
+  id: '/interview/session/$id',
+  path: '/interview/session/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppCoachSessionIdRoute = AppCoachSessionIdRouteImport.update({
   id: '/session/$id',
   path: '/session/$id',
@@ -79,6 +97,9 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRouteWithChildren
   '/interview/new': typeof InterviewNewRoute
   '/settings/privacy': typeof AppSettingsPrivacyRoute
+  '/interview/lobby/$id': typeof InterviewLobbyIdRoute
+  '/interview/report/$id': typeof InterviewReportIdRoute
+  '/interview/session/$id': typeof InterviewSessionIdRoute
   '/coach/session/$id': typeof AppCoachSessionIdRoute
 }
 export interface FileRoutesByTo {
@@ -90,6 +111,9 @@ export interface FileRoutesByTo {
   '/settings': typeof AppSettingsRouteWithChildren
   '/interview/new': typeof InterviewNewRoute
   '/settings/privacy': typeof AppSettingsPrivacyRoute
+  '/interview/lobby/$id': typeof InterviewLobbyIdRoute
+  '/interview/report/$id': typeof InterviewReportIdRoute
+  '/interview/session/$id': typeof InterviewSessionIdRoute
   '/coach/session/$id': typeof AppCoachSessionIdRoute
 }
 export interface FileRoutesById {
@@ -103,6 +127,9 @@ export interface FileRoutesById {
   '/_app/settings': typeof AppSettingsRouteWithChildren
   '/interview/new': typeof InterviewNewRoute
   '/_app/settings/privacy': typeof AppSettingsPrivacyRoute
+  '/interview/lobby/$id': typeof InterviewLobbyIdRoute
+  '/interview/report/$id': typeof InterviewReportIdRoute
+  '/interview/session/$id': typeof InterviewSessionIdRoute
   '/_app/coach/session/$id': typeof AppCoachSessionIdRoute
 }
 export interface FileRouteTypes {
@@ -116,6 +143,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/interview/new'
     | '/settings/privacy'
+    | '/interview/lobby/$id'
+    | '/interview/report/$id'
+    | '/interview/session/$id'
     | '/coach/session/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -127,6 +157,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/interview/new'
     | '/settings/privacy'
+    | '/interview/lobby/$id'
+    | '/interview/report/$id'
+    | '/interview/session/$id'
     | '/coach/session/$id'
   id:
     | '__root__'
@@ -139,6 +172,9 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/interview/new'
     | '/_app/settings/privacy'
+    | '/interview/lobby/$id'
+    | '/interview/report/$id'
+    | '/interview/session/$id'
     | '/_app/coach/session/$id'
   fileRoutesById: FileRoutesById
 }
@@ -146,6 +182,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   InterviewNewRoute: typeof InterviewNewRoute
+  InterviewLobbyIdRoute: typeof InterviewLobbyIdRoute
+  InterviewReportIdRoute: typeof InterviewReportIdRoute
+  InterviewSessionIdRoute: typeof InterviewSessionIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -213,6 +252,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsPrivacyRouteImport
       parentRoute: typeof AppSettingsRoute
     }
+    '/interview/lobby/$id': {
+      id: '/interview/lobby/$id'
+      path: '/interview/lobby/$id'
+      fullPath: '/interview/lobby/$id'
+      preLoaderRoute: typeof InterviewLobbyIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/interview/report/$id': {
+      id: '/interview/report/$id'
+      path: '/interview/report/$id'
+      fullPath: '/interview/report/$id'
+      preLoaderRoute: typeof InterviewReportIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/interview/session/$id': {
+      id: '/interview/session/$id'
+      path: '/interview/session/$id'
+      fullPath: '/interview/session/$id'
+      preLoaderRoute: typeof InterviewSessionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app/coach/session/$id': {
       id: '/_app/coach/session/$id'
       path: '/session/$id'
@@ -269,6 +329,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   InterviewNewRoute: InterviewNewRoute,
+  InterviewLobbyIdRoute: InterviewLobbyIdRoute,
+  InterviewReportIdRoute: InterviewReportIdRoute,
+  InterviewSessionIdRoute: InterviewSessionIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
