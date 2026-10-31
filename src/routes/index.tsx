@@ -35,8 +35,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Ripple — AI Interview & Communication Coach" },
       {
         property: "og:description",
-        content:
-          "Practice the interview. Understand your performance. Improve with evidence.",
+        content: "Practice the interview. Understand your performance. Improve with evidence.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -88,8 +87,8 @@ function HeroPreview() {
           Question 3 of 5 · System design
         </p>
         <p className="mt-2 text-sm leading-relaxed sm:text-base">
-          "Design the schema for <em>orders</em> when the hot query is the last N orders per
-          user. Take me through your choices."
+          "Design the schema for <em>orders</em> when the hot query is the last N orders per user.
+          Take me through your choices."
         </p>
         <div className="mt-4 flex items-center justify-between rounded-lg border border-border bg-secondary px-3 py-2.5">
           <AudioBars />
@@ -120,8 +119,8 @@ function HeroPreview() {
           <div className="flex items-start gap-2.5">
             <TriangleAlert className="mt-0.5 size-4 shrink-0 text-warning" aria-hidden />
             <p className="text-xs leading-relaxed">
-              <span className="font-medium">Scaling arguments stay qualitative</span> — no
-              estimates in the sharding answer, 14:02.
+              <span className="font-medium">Scaling arguments stay qualitative</span> — no estimates
+              in the sharding answer, 14:02.
             </p>
           </div>
         </div>
@@ -156,7 +155,11 @@ function SectionHeading({
       <h2 className="mt-2 text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
         {title}
       </h2>
-      {description && <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">{description}</p>}
+      {description && (
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+          {description}
+        </p>
+      )}
     </div>
   );
 }
@@ -178,9 +181,8 @@ function TwoModes() {
             <h3 className="text-lg font-semibold">Realistic mock interview</h3>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-            A neutral interviewer, a timer, and questions that follow up on what you said. No
-            hints, no corrections, no model answers while the interview runs — exactly like the
-            real thing.
+            A neutral interviewer, a timer, and questions that follow up on what you said. No hints,
+            no corrections, no model answers while the interview runs — exactly like the real thing.
           </p>
           <ul className="mt-4 space-y-2 text-sm">
             {[
@@ -283,11 +285,29 @@ function ReportPreview() {
             </div>
             <div className="mt-4 space-y-3">
               {[
-                { icon: BadgeCheck, tone: "text-success", title: "Strength", body: "Summary-first structure — evidenced at 4:12 with a transcript excerpt." },
-                { icon: TriangleAlert, tone: "text-warning", title: "Improvement priority", body: "Quantify scaling arguments — practice action: one estimation drill per design question." },
-                { icon: AudioLines, tone: "text-primary", title: "Speech delivery", body: "128 wpm · 34 fillers · 94% transcript coverage — each with its method and confidence." },
+                {
+                  icon: BadgeCheck,
+                  tone: "text-success",
+                  title: "Strength",
+                  body: "Summary-first structure — evidenced at 4:12 with a transcript excerpt.",
+                },
+                {
+                  icon: TriangleAlert,
+                  tone: "text-warning",
+                  title: "Improvement priority",
+                  body: "Quantify scaling arguments — practice action: one estimation drill per design question.",
+                },
+                {
+                  icon: AudioLines,
+                  tone: "text-primary",
+                  title: "Speech delivery",
+                  body: "128 wpm · 34 fillers · 94% transcript coverage — each with its method and confidence.",
+                },
               ].map((item) => (
-                <div key={item.title} className="flex items-start gap-3 rounded-lg border border-border bg-background p-3">
+                <div
+                  key={item.title}
+                  className="flex items-start gap-3 rounded-lg border border-border bg-background p-3"
+                >
                   <item.icon className={`mt-0.5 size-4 shrink-0 ${item.tone}`} aria-hidden />
                   <div>
                     <p className="text-xs font-semibold">{item.title}</p>
@@ -324,10 +344,7 @@ function HowItWorks() {
   ];
   return (
     <section id="how-it-works" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-      <SectionHeading
-        eyebrow="How it works"
-        title="From setup to a practice plan in four steps."
-      />
+      <SectionHeading eyebrow="How it works" title="From setup to a practice plan in four steps." />
       <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, index) => (
           <li key={step.title} className="rounded-xl border border-border bg-card p-5">
@@ -356,12 +373,12 @@ function ResumeAndCommunication() {
               <h3 className="text-lg font-semibold">Resume-grounded questions</h3>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Upload your resume and the interview asks about the projects you actually claim —
-              with follow-ups that probe depth instead of accepting buzzwords.
+              Upload your resume and the interview asks about the projects you actually claim — with
+              follow-ups that probe depth instead of accepting buzzwords.
             </p>
             <blockquote className="mt-4 rounded-lg border-l-2 border-primary bg-background p-3 text-sm leading-relaxed">
-              "Your resume lists a REST API with authentication — what happens when two requests
-              hit the same endpoint at the same time?"
+              "Your resume lists a REST API with authentication — what happens when two requests hit
+              the same endpoint at the same time?"
             </blockquote>
             <p className="mt-3 text-xs text-muted-foreground">
               Illustrative example of follow-up behaviour in a demo session.
@@ -419,7 +436,10 @@ function EvidenceQuality() {
               body: "Low-certainty transcription is excluded from language feedback rather than quietly included.",
             },
           ].map((item) => (
-            <div key={item.title} className="flex items-start gap-3 rounded-lg border border-border bg-card p-4">
+            <div
+              key={item.title}
+              className="flex items-start gap-3 rounded-lg border border-border bg-card p-4"
+            >
               <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
               <div>
                 <p className="text-sm font-semibold">{item.title}</p>
@@ -441,8 +461,8 @@ function ClosingCta() {
           Practice the interview. Understand your performance. Improve with evidence.
         </h2>
         <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground sm:text-base">
-          Start with a 15-minute mock interview or a guided drill — no setup, and all
-          demonstration data is clearly labelled.
+          Start with a 15-minute mock interview or a guided drill — no setup, and all demonstration
+          data is clearly labelled.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Button size="lg" asChild>
@@ -473,7 +493,10 @@ function LandingPage() {
         <section className="mx-auto max-w-6xl px-4 pb-16 pt-12 sm:px-6 sm:pb-24 sm:pt-20">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
             <div>
-              <Badge variant="secondary" className="mb-5 gap-1.5 bg-secondary text-secondary-foreground">
+              <Badge
+                variant="secondary"
+                className="mb-5 gap-1.5 bg-secondary text-secondary-foreground"
+              >
                 <MicOff className="size-3" aria-hidden />
                 For B.Tech CSE students and early-career engineers
               </Badge>

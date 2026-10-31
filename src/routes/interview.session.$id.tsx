@@ -48,13 +48,7 @@ export const Route = createFileRoute("/interview/session/$id")({
 });
 
 type Phase =
-  | "connecting"
-  | "ready"
-  | "interviewer"
-  | "listening"
-  | "processing"
-  | "completing"
-  | "completed";
+  "connecting" | "ready" | "interviewer" | "listening" | "processing" | "completing" | "completed";
 
 const PHASE_LABELS: Record<Phase, string> = {
   connecting: "Connecting…",
@@ -197,9 +191,7 @@ function SessionPage() {
 
   const { config, summary } = session;
   const current = questions?.[questionIndex];
-  const typedLine = current
-    ? current.interviewerLine.slice(0, typedLength)
-    : "";
+  const typedLine = current ? current.interviewerLine.slice(0, typedLength) : "";
   const totalQuestions = questions?.length ?? 5;
 
   const endNow = () => {
@@ -229,7 +221,10 @@ function SessionPage() {
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="gap-1.5 border-border bg-secondary text-secondary-foreground">
+            <Badge
+              variant="outline"
+              className="gap-1.5 border-border bg-secondary text-secondary-foreground"
+            >
               <DemoLabel />
             </Badge>
             <AlertDialog>
@@ -242,8 +237,8 @@ function SessionPage() {
                 <AlertDialogHeader>
                   <AlertDialogTitle>End this interview now?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    The interview stops here and your report is generated from the answers so far
-                    — fewer answers mean thinner evidence. This action can't be undone.
+                    The interview stops here and your report is generated from the answers so far —
+                    fewer answers mean thinner evidence. This action can't be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -271,7 +266,9 @@ function SessionPage() {
               <span
                 className={cn(
                   "flex size-9 items-center justify-center rounded-full",
-                  listening ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground",
+                  listening
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-secondary-foreground",
                 )}
               >
                 {listening ? <Mic className="size-4" /> : <AudioLines className="size-4" />}
@@ -309,10 +306,11 @@ function SessionPage() {
           <div className="flex flex-1 flex-col px-4 py-6 sm:px-6">
             {phase === "connecting" && (
               <div className="m-auto text-center">
-                <Signal className="mx-auto size-6 animate-pulse text-muted-foreground" aria-hidden />
-                <p className="mt-3 text-sm text-muted-foreground">
-                  Establishing the demo session…
-                </p>
+                <Signal
+                  className="mx-auto size-6 animate-pulse text-muted-foreground"
+                  aria-hidden
+                />
+                <p className="mt-3 text-sm text-muted-foreground">Establishing the demo session…</p>
               </div>
             )}
             {phase === "ready" && (
@@ -322,35 +320,41 @@ function SessionPage() {
                 </p>
               </div>
             )}
-            {(phase === "interviewer" || phase === "listening" || phase === "processing") && current && (
-              <>
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  Question {questionIndex + 1} of {totalQuestions} · {current.topic}
-                </p>
-                <p className="mt-3 text-lg leading-relaxed sm:text-xl">{typedLine}</p>
-                {listening && (
-                  <div className="mt-auto pt-6">
-                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-secondary/60 px-4 py-3">
-                      <p className="text-xs text-muted-foreground">
-                        In a real session you would answer aloud. This demo advances on your
-                        command.
-                      </p>
-                      <Button onClick={() => setPhase("processing")} disabled={phase !== "listening"}>
-                        I'm done answering
-                      </Button>
-                    </div>
-                  </div>
-                )}
-                {phase === "processing" && (
-                  <p className="mt-6 text-sm text-muted-foreground">
-                    Recording your response in the transcript… (simulated)
+            {(phase === "interviewer" || phase === "listening" || phase === "processing") &&
+              current && (
+                <>
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    Question {questionIndex + 1} of {totalQuestions} · {current.topic}
                   </p>
-                )}
-              </>
-            )}
+                  <p className="mt-3 text-lg leading-relaxed sm:text-xl">{typedLine}</p>
+                  {listening && (
+                    <div className="mt-auto pt-6">
+                      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-secondary/60 px-4 py-3">
+                        <p className="text-xs text-muted-foreground">
+                          In a real session you would answer aloud. This demo advances on your
+                          command.
+                        </p>
+                        <Button
+                          onClick={() => setPhase("processing")}
+                          disabled={phase !== "listening"}
+                        >
+                          I'm done answering
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                  {phase === "processing" && (
+                    <p className="mt-6 text-sm text-muted-foreground">
+                      Recording your response in the transcript… (simulated)
+                    </p>
+                  )}
+                </>
+              )}
             {phase === "completing" && (
               <div className="m-auto text-center">
-                <p className="text-sm text-muted-foreground">Wrapping up and generating the report…</p>
+                <p className="text-sm text-muted-foreground">
+                  Wrapping up and generating the report…
+                </p>
               </div>
             )}
           </div>
@@ -422,7 +426,11 @@ function SessionPage() {
 
           <Card>
             <CardContent className="space-y-2 pt-6">
-              <Button variant="outline" className="w-full justify-start" onClick={() => setMuted((m) => !m)}>
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => setMuted((m) => !m)}
+              >
                 {muted ? <Mic className="size-4" /> : <MicOff className="size-4" />}
                 {muted ? "Unmute (demo)" : "Mute microphone"}
               </Button>
@@ -450,4 +458,3 @@ function SessionPage() {
     </div>
   );
 }
-

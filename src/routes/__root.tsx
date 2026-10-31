@@ -89,8 +89,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Ripple — AI Interview & Communication Coach" },
       {
         property: "og:description",
-        content:
-          "Practice the interview. Understand your performance. Improve with evidence.",
+        content: "Practice the interview. Understand your performance. Improve with evidence.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

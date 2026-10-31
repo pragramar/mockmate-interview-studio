@@ -16,13 +16,7 @@ import { SpeechTimeline } from "@/components/charts/speech-timeline";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getReport } from "@/lib/repo";
 import { modeLabel, roleLabel } from "@/lib/format";
@@ -82,7 +76,9 @@ function MetricRow({ metric }: { metric: MetricRecord }) {
         {metric.value !== null ? (
           <>
             {metric.value}
-            {metric.unit && <span className="ml-1 text-sm font-normal text-muted-foreground">{metric.unit}</span>}
+            {metric.unit && (
+              <span className="ml-1 text-sm font-normal text-muted-foreground">{metric.unit}</span>
+            )}
           </>
         ) : (
           <span className="text-sm font-normal text-muted-foreground">Unavailable</span>
@@ -107,8 +103,7 @@ function EvidenceBlock({
   return (
     <div className="mt-3 rounded-lg border-l-2 border-primary bg-secondary/50 p-3">
       <p className="flex items-start gap-2 text-sm italic leading-relaxed">
-        <Quote className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden />
-        "{quote}"
+        <Quote className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden />"{quote}"
       </p>
       <p className="mt-2 text-xs text-muted-foreground tabular-nums">
         {source} · {timestamp}
@@ -131,8 +126,7 @@ function ReportPage() {
         <Card className="max-w-md">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <CircleAlert className="size-5 text-warning" aria-hidden /> No report for this
-              session
+              <CircleAlert className="size-5 text-warning" aria-hidden /> No report for this session
             </CardTitle>
             <CardDescription>
               Reports exist for mock interviews completed in this demo. Guided practice gives its
@@ -173,10 +167,16 @@ function ReportPage() {
         {/* A. Summary */}
         <section aria-labelledby="summary-heading">
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="outline" className="border-border bg-secondary text-secondary-foreground">
+            <Badge
+              variant="outline"
+              className="border-border bg-secondary text-secondary-foreground"
+            >
               {modeLabel(report.mode)}
             </Badge>
-            <Badge variant="outline" className="border-border bg-secondary text-secondary-foreground">
+            <Badge
+              variant="outline"
+              className="border-border bg-secondary text-secondary-foreground"
+            >
               {roleLabel(report.role)}
             </Badge>
             <span className="text-sm text-muted-foreground">
@@ -236,7 +236,9 @@ function ReportPage() {
           <Alert className="mt-4">
             <Info className="size-4" />
             <AlertTitle>Evidence quality</AlertTitle>
-            <AlertDescription className="leading-relaxed">{report.evidenceQuality}</AlertDescription>
+            <AlertDescription className="leading-relaxed">
+              {report.evidenceQuality}
+            </AlertDescription>
           </Alert>
 
           <p className="mt-4 rounded-lg border border-border bg-secondary/60 p-3 text-sm leading-relaxed">
@@ -350,7 +352,9 @@ function ReportPage() {
                       <p className="text-xs font-semibold">Expected concepts</p>
                       <ul className="mt-1.5 space-y-1">
                         {question.expectedConcepts.map((concept) => (
-                          <li key={concept} className="text-xs text-muted-foreground">{concept}</li>
+                          <li key={concept} className="text-xs text-muted-foreground">
+                            {concept}
+                          </li>
                         ))}
                       </ul>
                     </div>
@@ -358,7 +362,9 @@ function ReportPage() {
                       <p className="text-xs font-semibold text-success">Demonstrated</p>
                       <ul className="mt-1.5 space-y-1">
                         {question.demonstrated.map((concept) => (
-                          <li key={concept} className="text-xs text-muted-foreground">{concept}</li>
+                          <li key={concept} className="text-xs text-muted-foreground">
+                            {concept}
+                          </li>
                         ))}
                       </ul>
                     </div>
@@ -366,7 +372,9 @@ function ReportPage() {
                       <p className="text-xs font-semibold text-warning">Missing or incorrect</p>
                       <ul className="mt-1.5 space-y-1">
                         {question.missing.map((concept) => (
-                          <li key={concept} className="text-xs text-muted-foreground">{concept}</li>
+                          <li key={concept} className="text-xs text-muted-foreground">
+                            {concept}
+                          </li>
                         ))}
                       </ul>
                     </div>
@@ -419,7 +427,10 @@ function ReportPage() {
 
         {/* F. Language feedback */}
         <section aria-labelledby="language-heading" className="print-block">
-          <h2 id="language-heading" className="flex items-center gap-2 text-xl font-semibold tracking-tight">
+          <h2
+            id="language-heading"
+            className="flex items-center gap-2 text-xl font-semibold tracking-tight"
+          >
             <Languages className="size-5 text-primary" aria-hidden /> Language feedback
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -451,7 +462,10 @@ function ReportPage() {
 
         {/* G. Resume and project feedback */}
         <section aria-labelledby="resume-heading" className="print-block">
-          <h2 id="resume-heading" className="flex items-center gap-2 text-xl font-semibold tracking-tight">
+          <h2
+            id="resume-heading"
+            className="flex items-center gap-2 text-xl font-semibold tracking-tight"
+          >
             <FileText className="size-5 text-primary" aria-hidden /> Resume and project feedback
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -460,7 +474,10 @@ function ReportPage() {
           </p>
           <ul className="mt-4 space-y-2.5">
             {report.resumeFeedback.map((observation, index) => (
-              <li key={index} className="rounded-lg border border-border bg-card p-3 text-sm leading-relaxed">
+              <li
+                key={index}
+                className="rounded-lg border border-border bg-card p-3 text-sm leading-relaxed"
+              >
                 {observation}
               </li>
             ))}
@@ -483,9 +500,12 @@ function ReportPage() {
                 className="group rounded-xl border border-border bg-card p-4 transition-colors hover:bg-accent"
               >
                 <p className="text-sm font-medium">{action.title}</p>
-                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{action.description}</p>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                  {action.description}
+                </p>
                 <p className="mt-3 flex items-center gap-1 text-xs font-medium text-primary">
-                  Open drill <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
+                  Open drill{" "}
+                  <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
                 </p>
               </Link>
             ))}

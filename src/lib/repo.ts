@@ -4,12 +4,7 @@ import {
   MOCK_INTERVIEW_SCRIPT,
   SAMPLE_REPORT,
 } from "@/data/fixtures";
-import type {
-  CoachExercise,
-  InterviewConfig,
-  InterviewSummary,
-  Report,
-} from "@/types";
+import type { CoachExercise, InterviewConfig, InterviewSummary, Report } from "@/types";
 
 /**
  * Demo data layer.
@@ -108,9 +103,7 @@ export function listInterviews(): InterviewSummary[] {
   const local = readLocalSessions().map((s) => s.summary);
   const fixtureIds = new Set(DEMO_INTERVIEWS.map((d) => d.id));
   const merged = [...local, ...DEMO_INTERVIEWS.filter((d) => !fixtureIds.has(d.id))];
-  return merged.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  );
+  return merged.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
 export function getReport(sessionId: string): Report | undefined {

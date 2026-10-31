@@ -16,13 +16,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { DEMO_INTERVIEWS } from "@/data/fixtures";
 import { formatDate } from "@/lib/format";
@@ -55,7 +49,8 @@ const consentHistory = [
   {
     date: "2026-10-08T18:20:05Z",
     label: "Audio processing consent given",
-    detail: "Required for mock interviews. Audio is processed to produce the transcript and report.",
+    detail:
+      "Required for mock interviews. Audio is processed to produce the transcript and report.",
   },
   {
     date: "2026-10-08T18:20:09Z",
@@ -75,9 +70,7 @@ function PrivacyPage() {
 
   useEffect(() => {
     setRetention(window.localStorage.getItem("interview-coach-retain-audio") === "true");
-    setImprovement(
-      window.localStorage.getItem("interview-coach-improvement-consent") === "true",
-    );
+    setImprovement(window.localStorage.getItem("interview-coach-improvement-consent") === "true");
   }, []);
 
   return (
@@ -89,8 +82,7 @@ function PrivacyPage() {
         <Card>
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <ShieldCheck className="size-4 text-primary" aria-hidden /> How this demo handles
-              data
+              <ShieldCheck className="size-4 text-primary" aria-hidden /> How this demo handles data
             </CardTitle>
             <CardDescription className="text-sm leading-relaxed">
               This demonstration build has no server and no account system. Configuration and
@@ -129,9 +121,7 @@ function PrivacyPage() {
             </div>
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm font-medium">
-                  Allow anonymised use to improve the product
-                </p>
+                <p className="text-sm font-medium">Allow anonymised use to improve the product</p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   Off by default. Would share anonymised excerpts for product improvement. No such
                   pipeline exists in this demo.
@@ -189,9 +179,7 @@ function PrivacyPage() {
                   note: "Ripple demo export — local demonstration data only",
                   exportedAt: new Date().toISOString(),
                   consentHistory,
-                  locallyCreatedSessions: window.localStorage.getItem(
-                    "interview-coach-sessions",
-                  ),
+                  locallyCreatedSessions: window.localStorage.getItem("interview-coach-sessions"),
                   lastConfig: window.localStorage.getItem("interview-coach-last-config"),
                   sampleInterviews: DEMO_INTERVIEWS,
                 };
@@ -220,8 +208,7 @@ function PrivacyPage() {
                   <AlertDialogDescription>
                     This removes locally created demo sessions, your last configuration and saved
                     preferences from this browser. Sample fixtures used by the demo are not
-            deletable. Nothing is stored on a server, so there is nothing further to
-                    delete.
+                    deletable. Nothing is stored on a server, so there is nothing further to delete.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

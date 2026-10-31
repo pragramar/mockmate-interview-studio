@@ -20,15 +20,13 @@ const tooltipStyle = {
 };
 
 /** Theme-aware line chart for longitudinal progress (restrained teal series). */
-export function ProgressChart({
-  data,
-  height = 260,
-}: {
-  data: ProgressPoint[];
-  height?: number;
-}) {
+export function ProgressChart({ data, height = 260 }: { data: ProgressPoint[]; height?: number }) {
   return (
-    <div role="img" aria-label="Line chart of technical and communication scores across sessions" style={{ width: "100%", height }}>
+    <div
+      role="img"
+      aria-label="Line chart of technical and communication scores across sessions"
+      style={{ width: "100%", height }}
+    >
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: -18 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />

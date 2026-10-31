@@ -1,25 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import {
-  ArrowLeft,
-  ArrowRight,
-  FileText,
-  Lightbulb,
-  Mic,
-  ShieldCheck,
-  Upload,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, FileText, Lightbulb, Mic, ShieldCheck, Upload } from "lucide-react";
 import { useState } from "react";
 
 import { DemoLabel } from "@/components/demo-label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,7 +19,13 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { createSession, defaultConfig } from "@/lib/repo";
 import { cn } from "@/lib/utils";
-import type { Difficulty, InterviewConfig, InterviewDuration, Seniority, TargetRole } from "@/types";
+import type {
+  Difficulty,
+  InterviewConfig,
+  InterviewDuration,
+  Seniority,
+  TargetRole,
+} from "@/types";
 
 export const Route = createFileRoute("/interview/new")({
   head: () => ({
@@ -97,8 +89,7 @@ function StepIndicator({ step, onJump }: { step: number; onJump: (step: number) 
   return (
     <ol aria-label="Setup progress" className="flex flex-wrap items-center gap-2 sm:gap-4">
       {STEPS.map((s, index) => {
-        const state =
-          s.id === step ? "current" : s.id < step ? "done" : "upcoming";
+        const state = s.id === step ? "current" : s.id < step ? "done" : "upcoming";
         return (
           <li key={s.id} className="flex items-center gap-2 sm:gap-4">
             {index > 0 && <span aria-hidden className="h-px w-6 bg-border sm:w-10" />}
@@ -212,28 +203,34 @@ function InterviewSetupPage() {
           <section aria-label="Select interview mode" className="mt-8">
             <h1 className="text-2xl font-semibold tracking-tight">How do you want to practise?</h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              These two modes are deliberately different — what they show while you work is not
-              the same.
+              These two modes are deliberately different — what they show while you work is not the
+              same.
             </p>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {(
-                [
-                  {
-                    mode: "mock" as const,
-                    icon: Mic,
-                    title: "Realistic Mock Interview",
-                    body: "Test your knowledge under assessment conditions. Detailed feedback comes after the interview.",
-                    points: ["No hints or answers during the session", "Timer, progress and follow-up questions", "Evidence-based report at the end"],
-                  },
-                  {
-                    mode: "guided" as const,
-                    icon: Lightbulb,
-                    title: "Guided Practice Coach",
-                    body: "Learn through hints, explanations, retries, and targeted feedback.",
-                    points: ["Hints at the level you choose", "Model answers after you attempt", "Attempt-to-attempt comparison"],
-                  },
-                ]
-              ).map((option) => {
+              {[
+                {
+                  mode: "mock" as const,
+                  icon: Mic,
+                  title: "Realistic Mock Interview",
+                  body: "Test your knowledge under assessment conditions. Detailed feedback comes after the interview.",
+                  points: [
+                    "No hints or answers during the session",
+                    "Timer, progress and follow-up questions",
+                    "Evidence-based report at the end",
+                  ],
+                },
+                {
+                  mode: "guided" as const,
+                  icon: Lightbulb,
+                  title: "Guided Practice Coach",
+                  body: "Learn through hints, explanations, retries, and targeted feedback.",
+                  points: [
+                    "Hints at the level you choose",
+                    "Model answers after you attempt",
+                    "Attempt-to-attempt comparison",
+                  ],
+                },
+              ].map((option) => {
                 const selected = config.mode === option.mode;
                 const Icon = option.icon;
                 return (
@@ -255,8 +252,14 @@ function InterviewSetupPage() {
                     <p className="mt-1.5 text-sm text-muted-foreground">{option.body}</p>
                     <ul className="mt-4 space-y-1.5">
                       {option.points.map((point) => (
-                        <li key={point} className="flex items-start gap-2 text-xs text-muted-foreground">
-                          <span aria-hidden className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
+                        <li
+                          key={point}
+                          className="flex items-start gap-2 text-xs text-muted-foreground"
+                        >
+                          <span
+                            aria-hidden
+                            className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary"
+                          />
                           {point}
                         </li>
                       ))}
@@ -284,22 +287,36 @@ function InterviewSetupPage() {
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="role">Target role</Label>
-                  <Select value={config.role} onValueChange={(v) => update({ role: v as TargetRole })}>
-                    <SelectTrigger id="role"><SelectValue /></SelectTrigger>
+                  <Select
+                    value={config.role}
+                    onValueChange={(v) => update({ role: v as TargetRole })}
+                  >
+                    <SelectTrigger id="role">
+                      <SelectValue />
+                    </SelectTrigger>
                     <SelectContent>
                       {ROLES.map((role) => (
-                        <SelectItem key={role.value} value={role.value}>{role.label}</SelectItem>
+                        <SelectItem key={role.value} value={role.value}>
+                          {role.label}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="seniority">Seniority</Label>
-                  <Select value={config.seniority} onValueChange={(v) => update({ seniority: v as Seniority })}>
-                    <SelectTrigger id="seniority"><SelectValue /></SelectTrigger>
+                  <Select
+                    value={config.seniority}
+                    onValueChange={(v) => update({ seniority: v as Seniority })}
+                  >
+                    <SelectTrigger id="seniority">
+                      <SelectValue />
+                    </SelectTrigger>
                     <SelectContent>
                       {SENIORITIES.map((s) => (
-                        <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                        <SelectItem key={s.value} value={s.value}>
+                          {s.label}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -308,7 +325,9 @@ function InterviewSetupPage() {
 
               <div className="space-y-2">
                 <Label>Domain focus</Label>
-                <p className="text-xs text-muted-foreground">Pick one or more topics to emphasise.</p>
+                <p className="text-xs text-muted-foreground">
+                  Pick one or more topics to emphasise.
+                </p>
                 <div className="flex flex-wrap gap-2" role="group" aria-label="Domain focus">
                   {DOMAINS.map((domain) => {
                     const selected = config.domains.includes(domain);
@@ -337,15 +356,22 @@ function InterviewSetupPage() {
                   })}
                 </div>
                 {domainError && (
-                  <p role="alert" className="text-sm text-destructive">{domainError}</p>
+                  <p role="alert" className="text-sm text-destructive">
+                    {domainError}
+                  </p>
                 )}
               </div>
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="difficulty">Difficulty</Label>
-                  <Select value={config.difficulty} onValueChange={(v) => update({ difficulty: v as Difficulty })}>
-                    <SelectTrigger id="difficulty"><SelectValue /></SelectTrigger>
+                  <Select
+                    value={config.difficulty}
+                    onValueChange={(v) => update({ difficulty: v as Difficulty })}
+                  >
+                    <SelectTrigger id="difficulty">
+                      <SelectValue />
+                    </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="easy">Easy</SelectItem>
                       <SelectItem value="intermediate">Intermediate</SelectItem>
@@ -357,9 +383,13 @@ function InterviewSetupPage() {
                   <Label htmlFor="duration">Duration</Label>
                   <Select
                     value={String(config.durationMinutes)}
-                    onValueChange={(v) => update({ durationMinutes: Number(v) as InterviewDuration })}
+                    onValueChange={(v) =>
+                      update({ durationMinutes: Number(v) as InterviewDuration })
+                    }
                   >
-                    <SelectTrigger id="duration"><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="duration">
+                      <SelectValue />
+                    </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="15">15 minutes</SelectItem>
                       <SelectItem value="30">30 minutes</SelectItem>
@@ -414,7 +444,11 @@ function InterviewSetupPage() {
                     />
                   </label>
                 )}
-                {resumeError && <p role="alert" className="text-sm text-destructive">{resumeError}</p>}
+                {resumeError && (
+                  <p role="alert" className="text-sm text-destructive">
+                    {resumeError}
+                  </p>
+                )}
                 <p className="text-xs text-muted-foreground">
                   The demo records only the file name — no file is uploaded anywhere.
                 </p>
@@ -423,7 +457,9 @@ function InterviewSetupPage() {
               <div className="space-y-2">
                 <Label htmlFor="language">Interview language</Label>
                 <Select value={config.language} onValueChange={(v) => update({ language: v })}>
-                  <SelectTrigger id="language"><SelectValue /></SelectTrigger>
+                  <SelectTrigger id="language">
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="English">English</SelectItem>
                   </SelectContent>
@@ -450,39 +486,40 @@ function InterviewSetupPage() {
           <section aria-label="Consent and privacy" className="mt-8">
             <h1 className="text-2xl font-semibold tracking-tight">Consent and privacy</h1>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              In a connected build, your audio is transcribed and analysed to produce feedback.
-              That processing is not private from the AI provider that performs it — this demo
-              makes no claim otherwise, and everything here is simulated anyway.
+              In a connected build, your audio is transcribed and analysed to produce feedback. That
+              processing is not private from the AI provider that performs it — this demo makes no
+              claim otherwise, and everything here is simulated anyway.
             </p>
             <div className="mt-6 space-y-4">
-              {(
-                [
-                  {
-                    key: "ageConfirmed" as const,
-                    required: true,
-                    title: "I confirm I am 18 or older",
-                    detail: "Required. This demo is intended for adults preparing for employment interviews.",
-                  },
-                  {
-                    key: "processAudio" as const,
-                    required: true,
-                    title: "I consent to my audio being processed for this interview",
-                    detail: "Required for mock interviews. Audio is transcribed and analysed to produce the report.",
-                  },
-                  {
-                    key: "retainAudio" as const,
-                    required: false,
-                    title: "Retain my audio so I can review my answers later",
-                    detail: "Optional, off by default. Retained audio stays available until you delete it.",
-                  },
-                  {
-                    key: "productImprovement" as const,
-                    required: false,
-                    title: "Allow anonymised use of my excerpts to improve the product",
-                    detail: "Optional, off by default. No such pipeline exists in this demo.",
-                  },
-                ]
-              ).map((item) => (
+              {[
+                {
+                  key: "ageConfirmed" as const,
+                  required: true,
+                  title: "I confirm I am 18 or older",
+                  detail:
+                    "Required. This demo is intended for adults preparing for employment interviews.",
+                },
+                {
+                  key: "processAudio" as const,
+                  required: true,
+                  title: "I consent to my audio being processed for this interview",
+                  detail:
+                    "Required for mock interviews. Audio is transcribed and analysed to produce the report.",
+                },
+                {
+                  key: "retainAudio" as const,
+                  required: false,
+                  title: "Retain my audio so I can review my answers later",
+                  detail:
+                    "Optional, off by default. Retained audio stays available until you delete it.",
+                },
+                {
+                  key: "productImprovement" as const,
+                  required: false,
+                  title: "Allow anonymised use of my excerpts to improve the product",
+                  detail: "Optional, off by default. No such pipeline exists in this demo.",
+                },
+              ].map((item) => (
                 <div
                   key={item.key}
                   className={cn(
@@ -505,7 +542,10 @@ function InterviewSetupPage() {
                     <Label htmlFor={item.key} className="text-sm font-medium">
                       {item.title}
                       {item.required && (
-                        <Badge variant="outline" className="ml-2 border-border bg-background text-[10px]">
+                        <Badge
+                          variant="outline"
+                          className="ml-2 border-border bg-background text-[10px]"
+                        >
                           Required
                         </Badge>
                       )}
@@ -516,7 +556,11 @@ function InterviewSetupPage() {
                   </div>
                 </div>
               ))}
-              {consentError && <p role="alert" className="text-sm text-destructive">{consentError}</p>}
+              {consentError && (
+                <p role="alert" className="text-sm text-destructive">
+                  {consentError}
+                </p>
+              )}
             </div>
             <div className="mt-8 flex justify-between">
               <Button variant="outline" onClick={() => setStep(2)}>
@@ -538,46 +582,60 @@ function InterviewSetupPage() {
               looks off.
             </p>
             <div className="mt-6 space-y-3">
-              {(
-                [
-                  {
-                    title: "Mode",
-                    edit: () => setStep(1),
-                    rows: [
-                      [
-                        config.mode === "mock" ? "Realistic Mock Interview" : "Guided Practice Coach",
-                        config.mode === "mock"
-                          ? "Assessment conditions; feedback after the interview."
-                          : "Hints, retries and model answers as you practise.",
-                      ],
+              {[
+                {
+                  title: "Mode",
+                  edit: () => setStep(1),
+                  rows: [
+                    [
+                      config.mode === "mock" ? "Realistic Mock Interview" : "Guided Practice Coach",
+                      config.mode === "mock"
+                        ? "Assessment conditions; feedback after the interview."
+                        : "Hints, retries and model answers as you practise.",
                     ],
-                  },
-                  {
-                    title: "Preferences",
-                    edit: () => setStep(2),
-                    rows: [
-                      ["Target role", ROLES.find((r) => r.value === config.role)?.label ?? config.role],
-                      ["Seniority", SENIORITIES.find((s) => s.value === config.seniority)?.label ?? config.seniority],
-                      ["Domain focus", config.domains.join(", ") || "—"],
-                      ["Difficulty", config.difficulty.charAt(0).toUpperCase() + config.difficulty.slice(1)],
-                      ["Duration", `${config.durationMinutes} minutes`],
-                      ["Language", config.language],
-                      ["Job description", config.jobDescription?.trim() ? "Added" : "Not provided"],
-                      ["Resume", config.resumeFileName ?? "Not uploaded"],
+                  ],
+                },
+                {
+                  title: "Preferences",
+                  edit: () => setStep(2),
+                  rows: [
+                    [
+                      "Target role",
+                      ROLES.find((r) => r.value === config.role)?.label ?? config.role,
                     ],
-                  },
-                  {
-                    title: "Consent",
-                    edit: () => setStep(3),
-                    rows: [
-                      ["Age confirmation (18+)", config.consents.ageConfirmed ? "Confirmed" : "Not confirmed"],
-                      ["Audio processing", config.consents.processAudio ? "Consented" : "Not consented"],
-                      ["Audio retention", config.consents.retainAudio ? "Yes" : "No"],
-                      ["Product improvement use", config.consents.productImprovement ? "Yes" : "No"],
+                    [
+                      "Seniority",
+                      SENIORITIES.find((s) => s.value === config.seniority)?.label ??
+                        config.seniority,
                     ],
-                  },
-                ]
-              ).map((section) => (
+                    ["Domain focus", config.domains.join(", ") || "—"],
+                    [
+                      "Difficulty",
+                      config.difficulty.charAt(0).toUpperCase() + config.difficulty.slice(1),
+                    ],
+                    ["Duration", `${config.durationMinutes} minutes`],
+                    ["Language", config.language],
+                    ["Job description", config.jobDescription?.trim() ? "Added" : "Not provided"],
+                    ["Resume", config.resumeFileName ?? "Not uploaded"],
+                  ],
+                },
+                {
+                  title: "Consent",
+                  edit: () => setStep(3),
+                  rows: [
+                    [
+                      "Age confirmation (18+)",
+                      config.consents.ageConfirmed ? "Confirmed" : "Not confirmed",
+                    ],
+                    [
+                      "Audio processing",
+                      config.consents.processAudio ? "Consented" : "Not consented",
+                    ],
+                    ["Audio retention", config.consents.retainAudio ? "Yes" : "No"],
+                    ["Product improvement use", config.consents.productImprovement ? "Yes" : "No"],
+                  ],
+                },
+              ].map((section) => (
                 <Card key={section.title}>
                   <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-base">{section.title}</CardTitle>
@@ -598,7 +656,11 @@ function InterviewSetupPage() {
                 </Card>
               ))}
             </div>
-            {consentError && <p role="alert" className="mt-4 text-sm text-destructive">{consentError}</p>}
+            {consentError && (
+              <p role="alert" className="mt-4 text-sm text-destructive">
+                {consentError}
+              </p>
+            )}
             <div className="mt-8 flex justify-between">
               <Button variant="outline" onClick={() => setStep(3)}>
                 <ArrowLeft className="size-4" /> Back

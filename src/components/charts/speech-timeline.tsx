@@ -26,9 +26,7 @@ export function SpeechTimeline({ timeline }: { timeline: TimelineSegment[] }) {
               key={index}
               style={{ width: `${width}%` }}
               className={
-                segment.kind === "speech"
-                  ? "h-full bg-primary/80"
-                  : "h-full bg-muted-foreground/25"
+                segment.kind === "speech" ? "h-full bg-primary/80" : "h-full bg-muted-foreground/25"
               }
             />
           );

@@ -147,8 +147,7 @@ export const SAMPLE_REPORT: Report = {
       observedIssue:
         "Filler words ('like', 'basically', 'you know') clustered when questions turned unfamiliar.",
       evidence: {
-        quote:
-          "So basically, like, the partition, you know, would basically split the data…",
+        quote: "So basically, like, the partition, you know, would basically split the data…",
         timestamp: "19:36",
         source: "Question 4 — Partitioning",
         why: "Seven fillers in 22 seconds appear in the transcript segment; the same segment also shows a 1.5× pace drop.",
@@ -177,11 +176,14 @@ export const SAMPLE_REPORT: Report = {
   questions: [
     {
       id: "q1",
-      question:
-        "Walk me through how you would design the rate-limiting layer for a public API.",
+      question: "Walk me through how you would design the rate-limiting layer for a public API.",
       responseExcerpt:
         "So in short, I'd pick a queue between the API and the worker — let me walk through why, then the failure modes…",
-      expectedConcepts: ["Token bucket or sliding window", "Distributed state (Redis)", "429 semantics"],
+      expectedConcepts: [
+        "Token bucket or sliding window",
+        "Distributed state (Redis)",
+        "429 semantics",
+      ],
       demonstrated: ["Token bucket naming", "Client identification by key"],
       missing: ["Where the counters live in a multi-node deployment", "Retry-After header"],
       evaluatorFeedback:
@@ -190,11 +192,14 @@ export const SAMPLE_REPORT: Report = {
     },
     {
       id: "q2",
-      question:
-        "A job queue is processing slowly and retries are piling up. How do you debug it?",
+      question: "A job queue is processing slowly and retries are piling up. How do you debug it?",
       responseExcerpt:
         "First I'd check whether it's the consumers or the queue itself — look at consumer CPU, then queue depth over time…",
-      expectedConcepts: ["Isolate consumer vs broker", "Observe queue depth/metrics", "Poison-message handling"],
+      expectedConcepts: [
+        "Isolate consumer vs broker",
+        "Observe queue depth/metrics",
+        "Poison-message handling",
+      ],
       demonstrated: ["Isolation-first instinct", "Mentioned queue depth"],
       missing: ["Dead-letter queues", "Idempotency of retries"],
       evaluatorFeedback:
@@ -203,11 +208,14 @@ export const SAMPLE_REPORT: Report = {
     },
     {
       id: "q3",
-      question:
-        "Design the schema for 'orders' when the hot query is the last N orders per user.",
+      question: "Design the schema for 'orders' when the hot query is the last N orders per user.",
       responseExcerpt:
         "I'd index on user_id plus created_at because the hot query is 'last N orders per user', but writes are heavy so I wouldn't index more than needed.",
-      expectedConcepts: ["Composite index matching the access pattern", "Pagination strategy", "Growth/sharding estimate"],
+      expectedConcepts: [
+        "Composite index matching the access pattern",
+        "Pagination strategy",
+        "Growth/sharding estimate",
+      ],
       demonstrated: ["Composite index reasoning", "Write-cost awareness"],
       missing: ["Keyset pagination", "Any order-of-magnitude sizing"],
       evaluatorFeedback:
@@ -220,7 +228,11 @@ export const SAMPLE_REPORT: Report = {
         "When would you partition a large Postgres table, and how would you choose the key?",
       responseExcerpt:
         "I haven't tuned Postgres partitioning in practice — my understanding is range partitions per month, but I'd verify with the docs before committing.",
-      expectedConcepts: ["Range vs hash partitioning", "Partition-pruning benefits", "Operational cost of migrations"],
+      expectedConcepts: [
+        "Range vs hash partitioning",
+        "Partition-pruning benefits",
+        "Operational cost of migrations",
+      ],
       demonstrated: ["Honest uncertainty", "Range partitioning by time"],
       missing: ["Partition pruning", "Migration mechanics"],
       evaluatorFeedback:
@@ -232,7 +244,11 @@ export const SAMPLE_REPORT: Report = {
       question: "How would you cache the product page of an e-commerce site?",
       responseExcerpt:
         "A CDN in front for the static shell, and Redis for fragments like price and stock…",
-      expectedConcepts: ["Cache invalidation strategy", "TTL vs explicit invalidation", "Stampede protection"],
+      expectedConcepts: [
+        "Cache invalidation strategy",
+        "TTL vs explicit invalidation",
+        "Stampede protection",
+      ],
       demonstrated: ["CDN + Redis layering"],
       missing: ["Invalidation triggers", "Stampede protection"],
       evaluatorFeedback:
@@ -254,14 +270,16 @@ export const SAMPLE_REPORT: Report = {
       value: "18",
       unit: "min",
       confidence: "high",
-      explanation: "Sum of speech segments detected from audio energy. 58% of the interview was your speaking time.",
+      explanation:
+        "Sum of speech segments detected from audio energy. 58% of the interview was your speaking time.",
     },
     pauseDuration: {
       label: "Pause time",
       value: "13",
       unit: "min",
       confidence: "high",
-      explanation: "Includes interviewer speaking time and your thinking pauses; the two are separated on the timeline.",
+      explanation:
+        "Includes interviewer speaking time and your thinking pauses; the two are separated on the timeline.",
     },
     fillers: {
       label: "Filler words",
@@ -274,7 +292,8 @@ export const SAMPLE_REPORT: Report = {
       label: "Interruption events",
       value: "2",
       confidence: "high",
-      explanation: "Moments where both speakers were active for over one second. Both were you resuming after the interviewer stopped.",
+      explanation:
+        "Moments where both speakers were active for over one second. Both were you resuming after the interviewer stopped.",
     },
     transcriptCoverage: {
       label: "Transcript coverage",
@@ -311,8 +330,7 @@ export const SAMPLE_REPORT: Report = {
     {
       original: "We are having the indexes on user_id.",
       correction: "We have indexes on user_id.",
-      explanation:
-        "Simple present fits a state description; 'are having' is a common tense slip.",
+      explanation: "Simple present fits a state description; 'are having' is a common tense slip.",
       meaningPreserved: true,
     },
     {

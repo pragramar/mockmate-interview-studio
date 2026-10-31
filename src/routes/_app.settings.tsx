@@ -5,13 +5,7 @@ import { Monitor, Moon, Sun } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { DemoLabel } from "@/components/demo-label";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -67,12 +61,14 @@ function SettingsPage() {
   }, [language, hydrated]);
 
   useEffect(() => {
-    if (hydrated)
-      window.localStorage.setItem("interview-coach-feedback-timing", feedbackTiming);
+    if (hydrated) window.localStorage.setItem("interview-coach-feedback-timing", feedbackTiming);
   }, [feedbackTiming, hydrated]);
 
   return (
-    <AppShell title="Settings" description="Preferences for this demo workspace. Changes apply immediately and persist in your browser.">
+    <AppShell
+      title="Settings"
+      description="Preferences for this demo workspace. Changes apply immediately and persist in your browser."
+    >
       <div className="space-y-6">
         <Card>
           <CardHeader>
@@ -82,7 +78,11 @@ function SettingsPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div role="radiogroup" aria-label="Theme preference" className="grid gap-3 sm:grid-cols-3">
+            <div
+              role="radiogroup"
+              aria-label="Theme preference"
+              className="grid gap-3 sm:grid-cols-3"
+            >
               {themeOptions.map((option) => {
                 const selected = theme === option.value;
                 const Icon = option.icon;
@@ -132,8 +132,8 @@ function SettingsPage() {
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
-                Only English is wired up in this demonstration build; other options stay visible
-                but disabled rather than pretending to work.
+                Only English is wired up in this demonstration build; other options stay visible but
+                disabled rather than pretending to work.
               </p>
             </div>
             <div className="space-y-2">

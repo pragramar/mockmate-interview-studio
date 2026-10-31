@@ -5,13 +5,7 @@ import { useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { DemoLabel } from "@/components/demo-label";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -77,7 +71,10 @@ function CoachPage() {
             <Card key={exercise.id} className="flex flex-col">
               <CardHeader>
                 <div className="flex items-center justify-between gap-2">
-                  <Badge variant="outline" className="border-border bg-secondary text-secondary-foreground">
+                  <Badge
+                    variant="outline"
+                    className="border-border bg-secondary text-secondary-foreground"
+                  >
                     {exercise.skill}
                   </Badge>
                   <span className="text-xs text-muted-foreground">
@@ -112,7 +109,9 @@ function CoachPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">How guided practice differs from a mock interview</CardTitle>
+            <CardTitle className="text-base">
+              How guided practice differs from a mock interview
+            </CardTitle>
           </CardHeader>
           <CardContent className="text-sm leading-relaxed text-muted-foreground">
             Here you can ask for hints, see explanations, rewrite and retry answers, and compare
