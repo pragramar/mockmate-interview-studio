@@ -97,7 +97,7 @@ export function AppShell({
           {!collapsed && (
             <Link to="/dashboard" className="flex items-center gap-2" aria-label="MockMate home">
               <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold">
-                R
+                M
               </span>
               <span className="text-sm font-semibold tracking-tight">MockMate</span>
             </Link>
@@ -138,7 +138,7 @@ export function AppShell({
                   <SheetHeader className="p-0 pb-2">
                     <SheetTitle className="flex items-center gap-2 text-sm">
                       <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold">
-                        R
+                        M
                       </span>
                       MockMate
                     </SheetTitle>
