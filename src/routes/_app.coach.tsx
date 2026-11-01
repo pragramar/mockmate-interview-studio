@@ -20,13 +20,13 @@ import { difficultyLabel } from "@/lib/format";
 export const Route = createFileRoute("/_app/coach")({
   head: () => ({
     meta: [
-      { title: "Guided practice coach — Ripple Interview Coach" },
+      { title: "Guided practice coach — MockMate Interview Coach" },
       {
         name: "description",
         content:
           "Skill-focused practice with hints, explanations, retries and model answers — shown only after you attempt.",
       },
-      { property: "og:title", content: "Guided practice coach — Ripple" },
+      { property: "og:title", content: "Guided practice coach — MockMate" },
       {
         property: "og:description",
         content: "Hints, explanations, retries and model answers for focused skills practice.",

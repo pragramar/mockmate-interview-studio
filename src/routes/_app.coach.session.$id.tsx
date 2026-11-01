@@ -24,13 +24,13 @@ import { difficultyLabel } from "@/lib/format";
 export const Route = createFileRoute("/_app/coach/session/$id")({
   head: ({ params }) => ({
     meta: [
-      { title: `Guided practice — Ripple Interview Coach` },
+      { title: `Guided practice — MockMate Interview Coach` },
       {
         name: "description",
         content:
           "Guided coaching session: attempt the question, request hints and explanations, retry and compare attempts.",
       },
-      { property: "og:title", content: "Guided practice session — Ripple" },
+      { property: "og:title", content: "Guided practice session — MockMate" },
       {
         property: "og:description",
         content: "Attempt, hints, retries and a model answer for focused practice.",
@@ -197,15 +197,20 @@ function CoachSessionPage() {
                       <p className="mt-1.5 text-sm leading-relaxed">{attempt}</p>
                     </div>
                   ))}
-                  {attempts.length >= 2 && (
-                    <p className="text-sm text-muted-foreground">
-                      {wordCount(attempts[attempts.length - 1]) > wordCount(attempts[0])
-                        ? "Your revision is longer and more detailed than your first attempt."
-                        : wordCount(attempts[attempts.length - 1]) < wordCount(attempts[0])
-                          ? "Your revision is tighter than your first attempt."
-                          : "Your revision keeps a similar length to your first attempt."}
-                    </p>
-                  )}
+                  {attempts.length >= 2 &&
+                    (() => {
+                      const firstCount = wordCount(attempts[0] ?? "");
+                      const latestCount = wordCount(attempts[attempts.length - 1] ?? "");
+                      return (
+                        <p className="text-sm text-muted-foreground">
+                          {latestCount > firstCount
+                            ? "Your revision is longer and more detailed than your first attempt."
+                            : latestCount < firstCount
+                              ? "Your revision is tighter than your first attempt."
+                              : "Your revision keeps a similar length to your first attempt."}
+                        </p>
+                      );
+                    })()}
                 </CardContent>
               </Card>
             )}
@@ -330,7 +335,7 @@ function CoachSessionPage() {
 
             <div className="flex flex-wrap gap-2">
               <Button variant="secondary" className="flex-1" asChild>
-                <Link to="/coach/session/$id" params={{ id: nextExercise.id }}>
+                <Link to="/coach/session/$id" params={{ id: nextExercise?.id ?? exercise.id }}>
                   Next exercise <ArrowRight className="size-4" />
                 </Link>
               </Button>

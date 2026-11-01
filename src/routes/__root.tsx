@@ -80,13 +80,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Ripple — AI Interview & Communication Coach" },
+      { title: "MockMate — AI Interview & Communication Coach" },
       {
         name: "description",
         content:
           "Realistic technical mock interviews and guided practice for B.Tech CSE students and early-career engineers, with feedback grounded in what you actually said.",
       },
-      { property: "og:title", content: "Ripple — AI Interview & Communication Coach" },
+      { property: "og:title", content: "MockMate — AI Interview & Communication Coach" },
       {
         property: "og:description",
         content: "Practice the interview. Understand your performance. Improve with evidence.",

@@ -27,12 +27,12 @@ import { difficultyLabel, modeLabel, roleLabel } from "@/lib/format";
 export const Route = createFileRoute("/interview/lobby/$id")({
   head: () => ({
     meta: [
-      { title: "Interview lobby — Ripple Interview Coach" },
+      { title: "Interview lobby — MockMate Interview Coach" },
       {
         name: "description",
         content: "Verify your microphone and consent status before the interview begins.",
       },
-      { property: "og:title", content: "Interview lobby — Ripple" },
+      { property: "og:title", content: "Interview lobby — MockMate" },
       { property: "og:description", content: "Device and readiness checks before you begin." },
       { property: "og:type", content: "website" },
     ],

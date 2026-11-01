@@ -17,13 +17,13 @@ import type { InterviewSummary } from "@/types";
 export const Route = createFileRoute("/_app/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — Ripple Interview Coach" },
+      { title: "Dashboard — MockMate Interview Coach" },
       {
         name: "description",
         content:
           "Your practice overview: recent interviews, latest evidence-based report summary and recommended next drills.",
       },
-      { property: "og:title", content: "Dashboard — Ripple Interview Coach" },
+      { property: "og:title", content: "Dashboard — MockMate Interview Coach" },
       {
         property: "og:description",
         content: "Recent interviews, latest report summary and recommended practice.",

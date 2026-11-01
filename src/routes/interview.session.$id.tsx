@@ -34,12 +34,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/interview/session/$id")({
   head: () => ({
     meta: [
-      { title: "Live interview — Ripple Interview Coach" },
+      { title: "Live interview — MockMate Interview Coach" },
       {
         name: "description",
         content: "Focused live interview view: current question, timer, progress and mic controls.",
       },
-      { property: "og:title", content: "Live interview — Ripple" },
+      { property: "og:title", content: "Live interview — MockMate" },
       { property: "og:description", content: "The focused interview experience." },
       { property: "og:type", content: "website" },
     ],

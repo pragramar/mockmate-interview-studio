@@ -20,12 +20,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_app/settings")({
   head: () => ({
     meta: [
-      { title: "Settings — Ripple Interview Coach" },
+      { title: "Settings — MockMate Interview Coach" },
       {
         name: "description",
         content: "Appearance, interview language, feedback timing and demo data controls.",
       },
-      { property: "og:title", content: "Settings — Ripple Interview Coach" },
+      { property: "og:title", content: "Settings — MockMate Interview Coach" },
       {
         property: "og:description",
         content: "Preferences, appearance and privacy settings.",
@@ -74,7 +74,7 @@ function SettingsPage() {
           <CardHeader>
             <CardTitle className="text-base">Appearance</CardTitle>
             <CardDescription>
-              Choose how Ripple looks. The selection persists across navigation and refreshes.
+              Choose how MockMate looks. The selection persists across navigation and refreshes.
             </CardDescription>
           </CardHeader>
           <CardContent>

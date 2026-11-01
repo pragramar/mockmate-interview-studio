@@ -4,15 +4,15 @@ import { Waves } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 
-export const PRODUCT_NAME = "Ripple";
+export const PRODUCT_NAME = "MockMate";
 
 export function Wordmark({ className = "" }: { className?: string }) {
   return (
-    <Link to="/" className={`flex items-center gap-2 ${className}`} aria-label="Ripple home">
+    <Link to="/" className={`flex items-center gap-2 ${className}`} aria-label="MockMate home">
       <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
         <Waves className="size-4" aria-hidden />
       </span>
-      <span className="text-lg font-semibold tracking-tight">Ripple</span>
+      <span className="text-lg font-semibold tracking-tight">MockMate</span>
       <span className="hidden text-xs text-muted-foreground sm:inline">Interview Coach</span>
     </Link>
   );

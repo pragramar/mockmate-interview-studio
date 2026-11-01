@@ -10,7 +10,7 @@ export function SpeechTimeline({ timeline }: { timeline: TimelineSegment[] }) {
     return <p className="text-sm text-muted-foreground">No timeline data available.</p>;
   }
 
-  const total = timeline[timeline.length - 1].endSec;
+  const total = timeline[timeline.length - 1]!.endSec;
 
   return (
     <figure>

@@ -24,12 +24,12 @@ import { formatDate } from "@/lib/format";
 export const Route = createFileRoute("/_app/settings/privacy")({
   head: () => ({
     meta: [
-      { title: "Consent & data controls — Ripple Interview Coach" },
+      { title: "Consent & data controls — MockMate Interview Coach" },
       {
         name: "description",
         content: "Consent history, audio processing choices and demo data controls.",
       },
-      { property: "og:title", content: "Consent & data controls — Ripple" },
+      { property: "og:title", content: "Consent & data controls — MockMate" },
       {
         property: "og:description",
         content: "Consent history, audio processing choices and data controls.",
@@ -176,7 +176,7 @@ function PrivacyPage() {
               variant="outline"
               onClick={() => {
                 const payload = {
-                  note: "Ripple demo export — local demonstration data only",
+                  note: "MockMate demo export — local demonstration data only",
                   exportedAt: new Date().toISOString(),
                   consentHistory,
                   locallyCreatedSessions: window.localStorage.getItem("interview-coach-sessions"),
