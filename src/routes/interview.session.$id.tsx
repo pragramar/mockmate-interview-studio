@@ -1,17 +1,17 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
-  AudioLines,
+  Camera,
   Captions,
   CircleAlert,
-  CircleStop,
+  LogOut,
   Mic,
   MicOff,
-  ShieldCheck,
-  Signal,
-  Timer,
+  Radio,
+  VideoOff,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import interviewerAvatar from "@/assets/interviewer-avatar.png";
 import { DemoLabel } from "@/components/demo-label";
 import {
   AlertDialog,
@@ -24,7 +24,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getInterviewScript, getSession, markReportAvailable } from "@/lib/repo";
@@ -37,7 +36,8 @@ export const Route = createFileRoute("/interview/session/$id")({
       { title: "Live interview — MockMate Interview Coach" },
       {
         name: "description",
-        content: "Focused live interview view: current question, timer, progress and mic controls.",
+        content:
+          "Focused live interview view: the AI interviewer on one side, your camera on the other, live transcription below.",
       },
       { property: "og:title", content: "Live interview — MockMate" },
       { property: "og:description", content: "The focused interview experience." },
@@ -48,7 +48,14 @@ export const Route = createFileRoute("/interview/session/$id")({
 });
 
 type Phase =
-  "connecting" | "ready" | "interviewer" | "listening" | "processing" | "completing" | "completed";
+  | "connecting"
+  | "ready"
+  | "interviewer"
+  | "listening"
+  | "processing"
+  | "completing";
+
+type CameraState = "requesting" | "live" | "denied" | "unavailable";
 
 const PHASE_LABELS: Record<Phase, string> = {
   connecting: "Connecting…",
@@ -57,7 +64,6 @@ const PHASE_LABELS: Record<Phase, string> = {
   listening: "Listening to you",
   processing: "Processing your response…",
   completing: "Completing the interview…",
-  completed: "Interview complete",
 };
 
 const TYPING_SPEED_MS = 28;
@@ -73,7 +79,11 @@ function SessionPage() {
   const [muted, setMuted] = useState(false);
   const [captionsOn, setCaptionsOn] = useState(true);
   const [elapsed, setElapsed] = useState(0);
-  const transcriptRef = useRef<HTMLDivElement>(null);
+  const [cameraState, setCameraState] = useState<CameraState>("requesting");
+  const [cameraMessage, setCameraMessage] = useState<string | null>(null);
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
 
   // Load the scripted demo question bank after mount (keeps module scope SSR-safe).
   const [questions, setQuestions] = useState<ReturnType<typeof getInterviewScript> | null>(null);
@@ -81,14 +91,57 @@ function SessionPage() {
     if (session) setQuestions(getInterviewScript());
   }, [session]);
 
-  // Connecting → ready
+  /* ---------------------------- Camera ---------------------------- */
+  const startCamera = async () => {
+    setCameraState("requesting");
+    setCameraMessage(null);
+    streamRef.current?.getTracks().forEach((track) => track.stop());
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setCameraState("unavailable");
+      setCameraMessage(
+        "Camera capture isn't available in this browser or context. The interview continues without your video — everything else still works.",
+      );
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play().catch(() => undefined);
+      }
+      setCameraState("live");
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "NotAllowedError") {
+        setCameraState("denied");
+        setCameraMessage(
+          "Camera permission was denied. To recover, allow the camera for this page in your browser's site settings, then retry. The demo continues without video meanwhile.",
+        );
+      } else {
+        setCameraState("unavailable");
+        setCameraMessage(
+          "No usable camera was found. Connect one and retry, or continue without video.",
+        );
+      }
+    }
+  };
+
+  useEffect(() => {
+    void startCamera();
+    return () => {
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    };
+  }, []);
+
+  /* ------------------------ Session state machine ------------------------ */
+  // Connecting → ready → interviewer typing → listening → processing → next/completing
   useEffect(() => {
     if (phase !== "connecting") return;
     const timer = setTimeout(() => setPhase("ready"), 1400);
     return () => clearTimeout(timer);
   }, [phase]);
 
-  // Ready → interviewer speaking
   useEffect(() => {
     if (phase !== "ready") return;
     const timer = setTimeout(() => {
@@ -98,29 +151,18 @@ function SessionPage() {
     return () => clearTimeout(timer);
   }, [phase]);
 
-  // Interviewer types out the current line
   useEffect(() => {
     if (phase !== "interviewer" || !questions) return;
     const line = questions[questionIndex]?.interviewerLine;
     if (!line) return;
     if (typedLength >= line.length) {
-      const timer = setTimeout(() => {
-        setPhase("listening");
-      }, 700);
+      const timer = setTimeout(() => setPhase("listening"), 700);
       return () => clearTimeout(timer);
     }
     const timer = setTimeout(() => setTypedLength((n) => n + 1), TYPING_SPEED_MS);
     return () => clearTimeout(timer);
   }, [phase, typedLength, questionIndex, questions]);
 
-  // Elapsed timer
-  useEffect(() => {
-    if (phase === "completed" || phase === "completing") return;
-    const interval = setInterval(() => setElapsed((s) => s + 1), 1000);
-    return () => clearInterval(interval);
-  }, [phase]);
-
-  // Processing → next question or completing
   useEffect(() => {
     if (phase !== "processing" || !questions) return;
     const timer = setTimeout(() => {
@@ -135,20 +177,20 @@ function SessionPage() {
     return () => clearTimeout(timer);
   }, [phase, questionIndex, questions]);
 
-  // Completing → navigate to report
   useEffect(() => {
     if (phase !== "completing") return;
     const timer = setTimeout(() => {
       if (session) markReportAvailable(session.summary.id);
-      setPhase("completed");
       navigate({ to: "/interview/report/$id", params: { id } });
     }, 1800);
     return () => clearTimeout(timer);
   }, [phase, session, navigate, id]);
 
   useEffect(() => {
-    transcriptRef.current?.scrollTo({ top: transcriptRef.current.scrollHeight });
-  }, [typedLength, questionIndex, phase]);
+    if (phase === "completing") return;
+    const interval = setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => clearInterval(interval);
+  }, [phase]);
 
   if (!session) {
     return (
@@ -173,52 +215,44 @@ function SessionPage() {
   const current = questions?.[questionIndex];
   const typedLine = current ? current.interviewerLine.slice(0, typedLength) : "";
   const totalQuestions = questions?.length ?? 5;
+  const interviewerSpeaking = phase === "interviewer";
 
   const endNow = () => {
     if (session) markReportAvailable(session.summary.id);
     navigate({ to: "/interview/report/$id", params: { id } });
   };
 
-  const listening = phase === "listening";
-
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      {/* Top status bar */}
+      {/* Top bar: wordmark, session context, exit */}
       <header className="border-b border-border print-hide">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
-          <div className="flex min-w-0 items-center gap-2 text-sm">
-            <span
-              className={cn(
-                "size-2 shrink-0 rounded-full",
-                phase === "connecting" || phase === "processing" || phase === "completing"
-                  ? "animate-pulse bg-warning"
-                  : "bg-success",
-              )}
-              aria-hidden
-            />
-            <span className="truncate text-muted-foreground">
-              {modeLabel(summary.mode)} · {roleLabel(summary.role)} · Demo simulation
+        <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
+              M
+            </span>
+            <span className="truncate text-sm font-semibold tracking-tight">MockMate</span>
+            <span className="hidden text-xs text-muted-foreground sm:inline">
+              · {modeLabel(summary.mode)} · {roleLabel(summary.role)}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <Badge
-              variant="outline"
-              className="gap-1.5 border-border bg-secondary text-secondary-foreground"
-            >
-              <DemoLabel />
-            </Badge>
+            <span className="hidden rounded-md border border-border bg-secondary px-2.5 py-1 text-xs font-medium tabular-nums sm:inline">
+              Q {Math.min(questionIndex + 1, totalQuestions)}/{totalQuestions} · {formatClock(elapsed)}
+            </span>
+            <DemoLabel />
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="outline" size="sm">
-                  <CircleStop className="size-4" /> End interview
+                  <LogOut className="size-4" /> Exit
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>End this interview now?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    The interview stops here and your report is generated from the answers so far —
-                    fewer answers mean thinner evidence. This action can't be undone.
+                    The interview stops here and your report is generated from the answers so far
+                    — fewer answers mean thinner evidence. This action can't be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -231,209 +265,155 @@ function SessionPage() {
         </div>
       </header>
 
-      <main className="mx-auto grid w-full max-w-6xl flex-1 gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[1fr_300px]">
-        {/* Main area */}
-        <section
-          aria-label="Interview room"
-          className="flex min-h-[60vh] flex-col rounded-xl border border-border bg-card"
-        >
-          {/* State banner */}
-          <div
-            aria-live="polite"
-            className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-5"
+      <main className="mx-auto w-full max-w-6xl flex-1 space-y-4 px-4 py-5 sm:px-6">
+        {/* Split view: interviewer | candidate camera */}
+        <div className="grid gap-4 md:grid-cols-2" aria-label="Interview room">
+          {/* Interviewer panel */}
+          <section
+            aria-label="AI interviewer"
+            className={cn(
+              "relative flex min-h-[240px] items-center justify-center overflow-hidden rounded-xl border bg-card sm:min-h-[320px]",
+              interviewerSpeaking ? "border-primary ring-2 ring-primary/40" : "border-border",
+            )}
           >
-            <div className="flex items-center gap-2.5">
+            <div className="relative">
               <span
+                aria-hidden
                 className={cn(
-                  "flex size-9 items-center justify-center rounded-full",
-                  listening
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground",
+                  "absolute -inset-2 rounded-full border-2 transition-opacity",
+                  interviewerSpeaking ? "animate-pulse border-primary/60 opacity-100" : "border-transparent opacity-0",
                 )}
-              >
-                {listening ? <Mic className="size-4" /> : <AudioLines className="size-4" />}
-              </span>
-              <div>
-                <p className="text-sm font-semibold">{PHASE_LABELS[phase]}</p>
-                <p className="text-xs text-muted-foreground">
-                  {listening
-                    ? muted
-                      ? "Your microphone is muted in this demo"
-                      : "Simulated microphone active — speak or continue when ready"
-                    : phase === "interviewer"
-                      ? "A scripted demo interviewer is asking the question"
-                      : "Simulated interview — no live AI is connected"}
-                </p>
-              </div>
+              />
+              <img
+                src={interviewerAvatar}
+                alt="AI interviewer avatar (illustrative, not a real person)"
+                width={816}
+                height={816}
+                loading="lazy"
+                className="size-28 rounded-full border-4 border-background object-cover shadow-sm sm:size-36"
+              />
             </div>
-            <div className="hidden items-end gap-1 sm:flex" aria-hidden>
-              {(listening && !muted ? [8, 14, 6, 16, 10, 5, 13, 7] : [3, 3, 3, 3, 3, 3, 3, 3]).map(
-                (height, index) => (
-                  <span
-                    key={index}
-                    className={cn(
-                      "w-1 rounded-full transition-all duration-150",
-                      listening && !muted ? "bg-primary" : "bg-muted-foreground/30",
-                    )}
-                    style={{ height: `${height}px` }}
-                  />
-                ),
-              )}
-            </div>
-          </div>
+            <p className="absolute bottom-3 left-3 rounded-md bg-background/85 px-2.5 py-1 text-xs font-medium backdrop-blur">
+              Interviewer (MockMate AI)
+            </p>
+            <p className="absolute bottom-3 right-3 text-xs text-muted-foreground">
+              <span aria-live="polite">{PHASE_LABELS[phase]}</span>
+            </p>
+          </section>
 
-          {/* Question area */}
-          <div className="flex flex-1 flex-col px-4 py-6 sm:px-6">
-            {phase === "connecting" && (
-              <div className="m-auto text-center">
-                <Signal
-                  className="mx-auto size-6 animate-pulse text-muted-foreground"
-                  aria-hidden
-                />
-                <p className="mt-3 text-sm text-muted-foreground">Establishing the demo session…</p>
+          {/* Candidate camera panel */}
+          <section
+            aria-label="Your camera"
+            className="relative min-h-[240px] overflow-hidden rounded-xl border border-border bg-muted sm:min-h-[320px]"
+          >
+            {cameraState === "live" ? (
+              <video
+                ref={videoRef}
+                autoPlay
+                muted
+                playsInline
+                className="size-full -scale-x-100 object-cover"
+                aria-label="Live preview of your camera (only you can see this in the demo)"
+              />
+            ) : (
+              <div className="flex size-full flex-col items-center justify-center gap-2 p-6 text-center">
+                {cameraState === "requesting" ? (
+                  <>
+                    <Camera className="size-6 animate-pulse text-muted-foreground" aria-hidden />
+                    <p className="text-sm text-muted-foreground">Requesting camera access…</p>
+                  </>
+                ) : (
+                  <>
+                    <VideoOff className="size-6 text-muted-foreground" aria-hidden />
+                    <p className="text-sm font-medium">
+                      {cameraState === "denied" ? "Camera off" : "Camera unavailable"}
+                    </p>
+                    <p className="max-w-xs text-xs text-muted-foreground">{cameraMessage}</p>
+                    <Button variant="outline" size="sm" onClick={() => void startCamera()}>
+                      Retry camera
+                    </Button>
+                  </>
+                )}
               </div>
             )}
-            {phase === "ready" && (
-              <div className="m-auto max-w-md text-center">
+            {cameraState === "live" && (
+              <p className="absolute right-3 top-3 flex items-center gap-1.5 rounded-md bg-background/85 px-2.5 py-1 text-xs font-medium backdrop-blur">
+                <span
+                  aria-hidden
+                  className={cn("size-2 rounded-full", muted ? "bg-muted-foreground" : "animate-pulse bg-destructive")}
+                />
+                {muted ? "Paused" : "Rec (simulated)"}
+              </p>
+            )}
+            <p className="absolute bottom-3 left-3 rounded-md bg-background/85 px-2.5 py-1 text-xs font-medium backdrop-blur">
+              You (demo)
+            </p>
+          </section>
+        </div>
+
+        {/* Controls */}
+        <div className="flex flex-wrap items-center justify-center gap-2" role="toolbar" aria-label="Interview controls">
+          <Button variant={muted ? "secondary" : "outline"} size="sm" onClick={() => setMuted((m) => !m)}>
+            {muted ? <Mic className="size-4" /> : <MicOff className="size-4" />}
+            {muted ? "Unmute (demo)" : "Mute microphone"}
+          </Button>
+          <Button
+            variant={captionsOn ? "secondary" : "outline"}
+            size="sm"
+            onClick={() => setCaptionsOn((c) => !c)}
+            aria-pressed={captionsOn}
+          >
+            <Captions className="size-4" /> {captionsOn ? "Hide transcription" : "Show transcription"}
+          </Button>
+          <span className="flex items-center gap-1.5 rounded-md border border-border bg-secondary px-2.5 py-1.5 text-xs text-muted-foreground">
+            <Radio className="size-3.5" aria-hidden />
+            Connection: simulated · stable
+          </span>
+          <span className="rounded-md border border-border bg-secondary px-2.5 py-1.5 text-xs text-muted-foreground tabular-nums sm:hidden">
+            Q {Math.min(questionIndex + 1, totalQuestions)}/{totalQuestions} · {formatClock(elapsed)}
+          </span>
+        </div>
+
+        {/* Transcription */}
+        {captionsOn && (
+          <section aria-label="Live transcription" className="rounded-xl border border-border bg-card">
+            <div className="border-b border-border px-4 py-2.5">
+              <p className="inline-flex items-center gap-2 rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
+                Transcription
+                <span className="text-muted-foreground">(simulated)</span>
+              </p>
+            </div>
+            <div className="px-4 py-4" role="log" aria-live="polite">
+              <p className="text-sm leading-relaxed">
+                {typedLine || "…"}
+              </p>
+              {phase === "listening" && (
+                <p className="mt-2 text-sm italic text-muted-foreground">
+                  [You are answering — your spoken words appear here in a connected build.]
+                </p>
+              )}
+              {phase === "connecting" && (
+                <p className="text-sm text-muted-foreground">Establishing the demo session…</p>
+              )}
+              {phase === "ready" && (
                 <p className="text-sm text-muted-foreground">
                   Connected. The interviewer will ask the first question in a moment.
                 </p>
-              </div>
-            )}
-            {(phase === "interviewer" || phase === "listening" || phase === "processing") &&
-              current && (
-                <>
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    Question {questionIndex + 1} of {totalQuestions} · {current.topic}
-                  </p>
-                  <p className="mt-3 text-lg leading-relaxed sm:text-xl">{typedLine}</p>
-                  {listening && (
-                    <div className="mt-auto pt-6">
-                      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-secondary/60 px-4 py-3">
-                        <p className="text-xs text-muted-foreground">
-                          In a real session you would answer aloud. This demo advances on your
-                          command.
-                        </p>
-                        <Button
-                          onClick={() => setPhase("processing")}
-                          disabled={phase !== "listening"}
-                        >
-                          I'm done answering
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                  {phase === "processing" && (
-                    <p className="mt-6 text-sm text-muted-foreground">
-                      Recording your response in the transcript… (simulated)
-                    </p>
-                  )}
-                </>
               )}
-            {phase === "completing" && (
-              <div className="m-auto text-center">
-                <p className="text-sm text-muted-foreground">
-                  Wrapping up and generating the report…
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Captions / transcript */}
-          {captionsOn && (
-            <div className="border-t border-border">
-              <div
-                ref={transcriptRef}
-                className="max-h-40 overflow-y-auto px-4 py-3 sm:px-5"
-                aria-label="Interview transcript"
-                role="log"
-              >
-                <p className="text-xs font-medium text-muted-foreground">Captions (live)</p>
-                <p className="mt-1.5 text-sm leading-relaxed">{typedLine || "…"}</p>
-                {listening && (
-                  <p className="mt-2 text-sm italic text-muted-foreground">
-                    [You are answering — simulated transcript]
-                  </p>
-                )}
-              </div>
+              {phase === "processing" && (
+                <p className="text-sm text-muted-foreground">Recording your response… (simulated)</p>
+              )}
+              {phase === "completing" && (
+                <p className="text-sm text-muted-foreground">Wrapping up and generating the report…</p>
+              )}
             </div>
-          )}
-        </section>
+          </section>
+        )}
 
-        {/* Side panel */}
-        <aside aria-label="Interview status" className="space-y-4">
-          <Card>
-            <CardContent className="space-y-4 pt-6">
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <Timer className="size-4" aria-hidden /> Elapsed
-                </span>
-                <span className="text-lg font-semibold tabular-nums">{formatClock(elapsed)}</span>
-              </div>
-              <div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Progress</span>
-                  <span className="tabular-nums">
-                    {Math.min(questionIndex + 1, totalQuestions)}/{totalQuestions}
-                  </span>
-                </div>
-                <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted">
-                  <div
-                    className="h-full rounded-full bg-primary transition-all"
-                    style={{
-                      width: `${((questionIndex + (phase === "processing" ? 1 : 0)) / totalQuestions) * 100}%`,
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Current topic</span>
-                <span className="font-medium">{current?.topic ?? "—"}</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Connection</span>
-                <span className="flex items-center gap-1.5 font-medium">
-                  <span className="size-1.5 rounded-full bg-success" aria-hidden />
-                  Simulated · stable
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Planned duration</span>
-                <span className="tabular-nums">{config.durationMinutes} min</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="space-y-2 pt-6">
-              <Button
-                variant="outline"
-                className="w-full justify-start"
-                onClick={() => setMuted((m) => !m)}
-              >
-                {muted ? <Mic className="size-4" /> : <MicOff className="size-4" />}
-                {muted ? "Unmute (demo)" : "Mute microphone"}
-              </Button>
-              <Button
-                variant={captionsOn ? "secondary" : "outline"}
-                className="w-full justify-start"
-                onClick={() => setCaptionsOn((c) => !c)}
-                aria-pressed={captionsOn}
-              >
-                <Captions className="size-4" /> {captionsOn ? "Hide captions" : "Show captions"}
-              </Button>
-              <p className="flex items-start gap-1.5 pt-1 text-xs text-muted-foreground">
-                <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden />
-                {config.consents.retainAudio
-                  ? "Audio retention is on for this demo session."
-                  : "Audio is not retained in this demo session."}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Mode A policy: no hints, scores or model answers are shown during a mock interview.
-              </p>
-            </CardContent>
-          </Card>
-        </aside>
+        <p className="text-center text-xs text-muted-foreground">
+          Demo simulation — the interviewer's questions come from a scripted bank and no live AI is
+          connected. Mode A policy: no hints, scores or model answers until the report.
+        </p>
       </main>
     </div>
   );
