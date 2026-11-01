@@ -11,13 +11,13 @@ import { formatRelative } from "@/lib/format";
 export const Route = createFileRoute("/_app/progress")({
   head: () => ({
     meta: [
-      { title: "Progress — Ripple Interview Coach" },
+      { title: "Progress — MockMate Interview Coach" },
       {
         name: "description",
         content:
           "Longitudinal view of your technical and communication practice, with comparable sessions only.",
       },
-      { property: "og:title", content: "Progress — Ripple Interview Coach" },
+      { property: "og:title", content: "Progress — MockMate Interview Coach" },
       {
         property: "og:description",
         content: "Technical and communication trends across your practice sessions.",

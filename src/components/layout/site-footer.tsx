@@ -16,7 +16,7 @@ const columns = [
     title: "Preparation",
     links: [
       { label: "Interview history", href: "/history" },
-      { label: "Sample report", href: "/interview/report/demo-1" },
+      { label: "Sample report", href: "/interview/report/$id" },
       { label: "Settings", href: "/settings" },
     ],
   },
@@ -51,12 +51,22 @@ export function SiteFooter() {
               <ul className="mt-3 space-y-2">
                 {column.links.map((link) => (
                   <li key={link.label}>
-                    <Link
-                      to={link.href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      {link.label}
-                    </Link>
+                    {link.href === "/interview/report/$id" ? (
+                      <Link
+                        to="/interview/report/$id"
+                        params={{ id: "demo-1" }}
+                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <Link
+                        to={link.href}
+                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -64,7 +74,7 @@ export function SiteFooter() {
           ))}
         </div>
         <div className="mt-10 flex flex-col gap-2 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 Ripple Interview Coach. Practice feedback only — not a hiring prediction.</p>
+          <p>© 2026 MockMate Interview Coach. Practice feedback only — not a hiring prediction.</p>
           <p>Built for B.Tech CSE students and early-career engineers.</p>
         </div>
       </div>

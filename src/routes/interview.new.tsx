@@ -30,13 +30,13 @@ import type {
 export const Route = createFileRoute("/interview/new")({
   head: () => ({
     meta: [
-      { title: "New interview — Ripple Interview Coach" },
+      { title: "New interview — MockMate Interview Coach" },
       {
         name: "description",
         content:
           "Configure a mock interview or guided practice: role, domains, difficulty, duration, resume and consent.",
       },
-      { property: "og:title", content: "Set up an interview — Ripple" },
+      { property: "og:title", content: "Set up an interview — MockMate" },
       {
         property: "og:description",
         content: "Configure a mock interview or guided practice session.",

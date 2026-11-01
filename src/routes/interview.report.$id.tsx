@@ -25,13 +25,13 @@ import type { Confidence, MetricRecord } from "@/types";
 export const Route = createFileRoute("/interview/report/$id")({
   head: () => ({
     meta: [
-      { title: "Interview report — Ripple Interview Coach" },
+      { title: "Interview report — MockMate Interview Coach" },
       {
         name: "description",
         content:
           "Evidence-based interview report: separate technical and communication assessments, transcript-linked strengths, priorities and speech metrics.",
       },
-      { property: "og:title", content: "Interview report — Ripple" },
+      { property: "og:title", content: "Interview report — MockMate" },
       {
         property: "og:description",
         content: "Evidence-based feedback grounded in what you actually said.",

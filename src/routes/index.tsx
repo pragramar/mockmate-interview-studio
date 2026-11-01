@@ -25,14 +25,14 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "Ripple — Practice the interview, improve with evidence",
+        title: "MockMate — Practice the interview, improve with evidence",
       },
       {
         name: "description",
         content:
           "Realistic technical mock interviews and guided practice for B.Tech CSE students and early-career engineers, with feedback grounded in what you actually said.",
       },
-      { property: "og:title", content: "Ripple — AI Interview & Communication Coach" },
+      { property: "og:title", content: "MockMate — AI Interview & Communication Coach" },
       {
         property: "og:description",
         content: "Practice the interview. Understand your performance. Improve with evidence.",

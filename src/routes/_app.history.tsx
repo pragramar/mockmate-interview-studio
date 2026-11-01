@@ -20,12 +20,12 @@ import type { InterviewSummary } from "@/types";
 export const Route = createFileRoute("/_app/history")({
   head: () => ({
     meta: [
-      { title: "Interview history — Ripple Interview Coach" },
+      { title: "Interview history — MockMate Interview Coach" },
       {
         name: "description",
         content: "Filterable list of your previous mock interviews and guided practice sessions.",
       },
-      { property: "og:title", content: "Interview history — Ripple Interview Coach" },
+      { property: "og:title", content: "Interview history — MockMate Interview Coach" },
       {
         property: "og:description",
         content: "Your previous mock interviews and guided practice sessions.",

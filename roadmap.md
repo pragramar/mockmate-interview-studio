@@ -15,3 +15,6 @@ Ocean & Teal frontend build (frontend-only, demo data layer).
 - [x] History "/history" and Progress "/progress"
 - [x] Settings "/settings" and Privacy "/settings/privacy"
 - [x] Verification: build clean, theme persistence, key journeys via Playwright
+- [x] Rename platform to MockMate everywhere
+- [x] Redesign live interview page: split view with AI interviewer panel and user camera panel, transcription below
+- [ ] Verify split-view interview flow in the running preview
