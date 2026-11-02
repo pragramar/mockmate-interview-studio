@@ -5,9 +5,10 @@ import {
   LayoutDashboard,
   Menu,
   Mic,
+  PanelLeftClose,
+  PanelLeftOpen,
   Settings,
   Sparkles,
-  X,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
@@ -26,7 +27,13 @@ const navItems = [
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;
 
-function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
+function SidebarNav({
+  collapsed = false,
+  onNavigate,
+}: {
+  collapsed?: boolean;
+  onNavigate?: () => void;
+}) {
   const matchRoute = useMatchRoute();
   return (
     <nav aria-label="Primary" className="flex flex-col gap-1">
@@ -39,15 +46,17 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
             to={item.to}
             onClick={onNavigate}
             aria-current={active ? "page" : undefined}
+            title={collapsed ? item.label : undefined}
             className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              "flex min-w-0 items-center rounded-lg text-sm font-medium transition-colors",
+              collapsed ? "size-9 shrink-0 justify-center self-center p-0" : "gap-3 px-3 py-2",
               active
                 ? "bg-sidebar-accent text-sidebar-accent-foreground"
                 : "text-muted-foreground hover:bg-accent hover:text-foreground",
             )}
           >
-            <Icon className="size-4" aria-hidden />
-            {item.label}
+            <Icon className="size-4 shrink-0" aria-hidden />
+            <span className={cn(collapsed ? "sr-only" : "min-w-0 truncate")}>{item.label}</span>
           </Link>
         );
       })}
