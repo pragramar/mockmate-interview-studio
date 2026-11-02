@@ -18,6 +18,7 @@ import { Route as AppProgressRouteImport } from './routes/_app.progress'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as InterviewNewRouteImport } from './routes/interview.new'
 import { Route as AppCoachIndexRouteImport } from './routes/_app.coach.index'
+import { Route as AppSettingsIndexRouteImport } from './routes/_app.settings.index'
 import { Route as AppSettingsPrivacyRouteImport } from './routes/_app.settings.privacy'
 import { Route as InterviewLobbyIdRouteImport } from './routes/interview.lobby.$id'
 import { Route as InterviewReportIdRouteImport } from './routes/interview.report.$id'
@@ -68,6 +69,11 @@ const AppCoachIndexRoute = AppCoachIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppCoachRoute,
 } as any)
+const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
 const AppSettingsPrivacyRoute = AppSettingsPrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/interview/report/$id': typeof InterviewReportIdRoute
   '/interview/session/$id': typeof InterviewSessionIdRoute
   '/coach/': typeof AppCoachIndexRoute
+  '/settings/': typeof AppSettingsIndexRoute
   '/coach/session/$id': typeof AppCoachSessionIdRoute
 }
 export interface FileRoutesByTo {
@@ -114,13 +121,13 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AppDashboardRoute
   '/history': typeof AppHistoryRoute
   '/progress': typeof AppProgressRoute
-  '/settings': typeof AppSettingsRouteWithChildren
   '/interview/new': typeof InterviewNewRoute
   '/settings/privacy': typeof AppSettingsPrivacyRoute
   '/interview/lobby/$id': typeof InterviewLobbyIdRoute
   '/interview/report/$id': typeof InterviewReportIdRoute
   '/interview/session/$id': typeof InterviewSessionIdRoute
   '/coach': typeof AppCoachIndexRoute
+  '/settings': typeof AppSettingsIndexRoute
   '/coach/session/$id': typeof AppCoachSessionIdRoute
 }
 export interface FileRoutesById {
@@ -138,6 +145,7 @@ export interface FileRoutesById {
   '/interview/report/$id': typeof InterviewReportIdRoute
   '/interview/session/$id': typeof InterviewSessionIdRoute
   '/_app/coach/': typeof AppCoachIndexRoute
+  '/_app/settings/': typeof AppSettingsIndexRoute
   '/_app/coach/session/$id': typeof AppCoachSessionIdRoute
 }
 export interface FileRouteTypes {
@@ -155,6 +163,7 @@ export interface FileRouteTypes {
     | '/interview/report/$id'
     | '/interview/session/$id'
     | '/coach/'
+    | '/settings/'
     | '/coach/session/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -162,13 +171,13 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/history'
     | '/progress'
-    | '/settings'
     | '/interview/new'
     | '/settings/privacy'
     | '/interview/lobby/$id'
     | '/interview/report/$id'
     | '/interview/session/$id'
     | '/coach'
+    | '/settings'
     | '/coach/session/$id'
   id:
     | '__root__'
@@ -185,6 +194,7 @@ export interface FileRouteTypes {
     | '/interview/report/$id'
     | '/interview/session/$id'
     | '/_app/coach/'
+    | '/_app/settings/'
     | '/_app/coach/session/$id'
   fileRoutesById: FileRoutesById
 }
@@ -262,6 +272,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCoachIndexRouteImport
       parentRoute: typeof AppCoachRoute
     }
+    '/_app/settings/': {
+      id: '/_app/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AppSettingsIndexRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
     '/_app/settings/privacy': {
       id: '/_app/settings/privacy'
       path: '/privacy'
@@ -316,10 +333,12 @@ const AppCoachRouteWithChildren = AppCoachRoute._addFileChildren(
 
 interface AppSettingsRouteChildren {
   AppSettingsPrivacyRoute: typeof AppSettingsPrivacyRoute
+  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
 }
 
 const AppSettingsRouteChildren: AppSettingsRouteChildren = {
   AppSettingsPrivacyRoute: AppSettingsPrivacyRoute,
+  AppSettingsIndexRoute: AppSettingsIndexRoute,
 }
 
 const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
