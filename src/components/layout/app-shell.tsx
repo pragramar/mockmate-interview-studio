@@ -102,26 +102,39 @@ export function AppShell({
           collapsed ? "w-16" : "w-60",
         )}
       >
-        <div className="flex items-center justify-between px-1">
+        <div
+          className={cn(
+            "flex items-center",
+            collapsed ? "flex-col justify-center gap-2" : "justify-between px-1",
+          )}
+        >
+          <Link
+            to="/dashboard"
+            aria-label="MockMate home"
+            className={cn(
+              "flex items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold",
+              collapsed ? "size-9 shrink-0" : "size-7",
+            )}
+          >
+            M
+          </Link>
           {!collapsed && (
-            <Link to="/dashboard" className="flex items-center gap-2" aria-label="MockMate home">
-              <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold">
-                M
-              </span>
-              <span className="text-sm font-semibold tracking-tight">MockMate</span>
+            <Link to="/dashboard" className="min-w-0 truncate text-sm font-semibold tracking-tight">
+              MockMate
             </Link>
           )}
           <Button
             variant="ghost"
             size="icon"
+            className="shrink-0"
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             onClick={() => setCollapsed((c) => !c)}
           >
-            {collapsed ? <Menu className="size-4" /> : <X className="size-4" />}
+            {collapsed ? <PanelLeftOpen className="size-4" /> : <PanelLeftClose className="size-4" />}
           </Button>
         </div>
-        <div className="mt-4 flex flex-1 flex-col">
-          <SidebarNav />
+        <div className="mt-4 flex min-w-0 flex-1 flex-col overflow-hidden">
+          <SidebarNav collapsed={collapsed} />
           {!collapsed && <SidebarFooter />}
         </div>
       </aside>
