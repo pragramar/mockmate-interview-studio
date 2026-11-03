@@ -61,6 +61,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-logo-tile: var(--logo-tile);
 }
 
 :root {
@@ -103,6 +104,8 @@
   --sidebar-accent-foreground: #0f766e;
   --sidebar-border: #d5e9e7;
   --sidebar-ring: #0f766e;
+  /* Fixed light backing for the navy logo emblem — same value in both themes */
+  --logo-tile: #f0fdfa;
 }
 
 .dark {
@@ -143,6 +146,7 @@
   --sidebar-accent-foreground: #5eead4;
   --sidebar-border: #2a3c4b;
   --sidebar-ring: #5eead4;
+  --logo-tile: #f0fdfa;
 }
 
 @layer base {
