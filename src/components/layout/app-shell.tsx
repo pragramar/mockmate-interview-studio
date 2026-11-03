@@ -13,6 +13,7 @@ import {
 import { useState, type ReactNode } from "react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LogoMark } from "@/components/mockmate-logo";
 import { DEMO_USER } from "@/data/fixtures";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
