@@ -108,15 +108,8 @@ export function AppShell({
             collapsed ? "flex-col justify-center gap-2" : "justify-between px-1",
           )}
         >
-          <Link
-            to="/dashboard"
-            aria-label="MockMate home"
-            className={cn(
-              "flex items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold",
-              collapsed ? "size-9 shrink-0" : "size-7",
-            )}
-          >
-            M
+          <Link to="/dashboard" aria-label="MockMate home">
+            <LogoMark className={collapsed ? "size-9" : "size-7"} />
           </Link>
           {!collapsed && (
             <Link to="/dashboard" className="min-w-0 truncate text-sm font-semibold tracking-tight">
@@ -159,9 +152,7 @@ export function AppShell({
                 <SheetContent side="left" className="w-72 p-4">
                   <SheetHeader className="p-0 pb-2">
                     <SheetTitle className="flex items-center gap-2 text-sm">
-                      <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold">
-                        M
-                      </span>
+                      <LogoMark className="size-7" />
                       MockMate
                     </SheetTitle>
                   </SheetHeader>
